@@ -30,3 +30,13 @@ npm start
 ```
 
 This will run `nodemon` to watch for changes in the compiled assets under `/dist`
+
+### Testing your dev environment
+This project has a `/healthcheck` endpoing that you can hit to test your environment. From Postman/Insomnia, or in the browser:
+```
+GET localhost:4369/healthcheck
+```
+You should see output in the console, and in the `logs/<logfile>` via:
+```sh
+tail -f logs/eaglelizard-api.log
+```
