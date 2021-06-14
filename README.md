@@ -9,6 +9,18 @@ npm i
 
 ## Local Dev
 This project uses Typescript.
+
+### dotenv
+config and secrets can be stored in a `.env` file locally for testing:
+```sh
+touch .env
+```
+
+add the following to specify port for the config:
+```
+PORT=4369
+```
+
 ### TS Compilation
 Compile with typescript:
 ```sh
