@@ -19,8 +19,6 @@ const RUNTIME_ENV = process.env.NODE_ENV || 'development';
   }
 })();
 
-console.log(typeof process.env.PORT);
-
 export const config = {
   PORT,
   APP_ROOT,

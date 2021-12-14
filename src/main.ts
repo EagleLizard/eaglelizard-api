@@ -2,7 +2,7 @@
 import sourceMapSupport from 'source-map-support';
 sourceMapSupport.install();
 
-import { initServer } from './src/server';
+import { initServer } from './server';
 
 (async () => {
   try {
@@ -14,7 +14,5 @@ import { initServer } from './src/server';
 })();
 
 async function main() {
-  console.log('Hello');
-
   await initServer();
 }

@@ -2,7 +2,7 @@
 import express, { Express } from 'express';
 // import morgan from 'morgan';
 
-import { config } from '../config';
+import { config } from './config';
 import { registerRoutes } from './routes';
 import { logger } from './lib/logger';
 import { logMiddleware } from './middleware/log-middleware/log-middleware';
