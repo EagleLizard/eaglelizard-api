@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import morgan, { StreamOptions } from 'morgan';
 
-import { logger } from '../../lib/logger';
+import { logger } from '../logger';
 
 export const morganStream: StreamOptions = {
   write: (message) => {

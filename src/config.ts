@@ -9,6 +9,8 @@ const DEFAULT_PORT = 8080;
 let PORT: number;
 const APP_ROOT = path.resolve(__dirname, '..');
 const RUNTIME_ENV = process.env.NODE_ENV || 'development';
+const GCP_PROJECT_ID = process.env.GCP_PROJECT_ID;
+const aws_access_key_id = process.env.aws_access_key_id;
 
 (() => {
   try {
@@ -23,6 +25,8 @@ export const config = {
   PORT,
   APP_ROOT,
   RUNTIME_ENV,
+  GCP_PROJECT_ID,
+  aws_access_key_id,
 };
 
 function init() {

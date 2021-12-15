@@ -3,9 +3,9 @@ import express, { Express } from 'express';
 // import morgan from 'morgan';
 
 import { config } from './config';
-import { registerRoutes } from './routes';
+import { registerRoutes } from './lib/routes';
 import { logger } from './lib/logger';
-import { logMiddleware } from './middleware/log-middleware/log-middleware';
+import { logMiddleware } from './lib/log-middleware/log-middleware';
 
 export async function initServer() {
   return new Promise<void>((resolve, reject) => {
