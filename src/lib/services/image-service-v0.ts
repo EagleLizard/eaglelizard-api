@@ -15,16 +15,49 @@ import { CacheFile } from '../modules/mem-cache/cache-file';
 export const MEM_CACHE = new MemCache;
 
 export async function getImageTransformStream(imageKey: string, folderKey: string, width?: number): Promise<ImageStream> {
-  let imageStream: ImageStream, contentStream: Readable, headers: Record<string, string>;
+  let imageStream: ImageStream;
 
   imageStream = await getImageStream(imageKey, folderKey);
-  contentStream = imageStream.stream;
-  headers = imageStream.headers;
   if(width !== undefined) {
+    imageStream = getResizeImageStream(imageKey, folderKey, width, imageStream);
+  }
+  return {
+    stream: imageStream.stream,
+    headers: imageStream.headers,
+  };
+}
+
+function getResizeImageStream(imageKey: string, folderKey: string, width: number, imageStream: ImageStream): ImageStream {
+  let cacheImageStream: ImageStream, contentStream: Readable, headers: Record<string, string>;
+  let cacheStream: PassThrough, imageDataChunks: string[], hasher: Hasher,
+    imageData: string;
+
+  if(MEM_CACHE.has(imageKey, folderKey, width)) {
+    cacheImageStream = getCacheStream(imageKey, folderKey, width);
+    contentStream = cacheImageStream.stream;
+    headers = cacheImageStream.headers;
+  } else {
+    headers = imageStream.headers;
+
+    cacheStream = new PassThrough;
+    cacheStream.setEncoding('binary');
+    hasher = getHasher();
+    imageDataChunks = [];
+
+    cacheStream.on('data', (chunk) => {
+      hasher.update(chunk);
+      imageDataChunks.push(chunk);
+    });
+    cacheStream.on('end', () => {
+      imageData = imageDataChunks.join('');
+      MEM_CACHE.set(imageData, headers['content-type'], hasher.digest(), imageKey, folderKey, width);
+    });
+
     contentStream = imageTransform({
       imageStream: imageStream.stream,
       contentType: headers['content-type'],
       width,
+      cacheStream,
     });
   }
   return {

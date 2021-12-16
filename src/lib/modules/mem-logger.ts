@@ -34,7 +34,7 @@ export class MemLogger {
 
     if(this.memCache !== undefined) {
       cacheSize = this.memCache.cacheSize() / 1024 / 1024;
-      console.log(`Cache Size: ${cacheSize.toFixed(2)} MB`);
+      console.log(`Cache Size: ${cacheSize.toFixed(3)} MB`);
     }
 
     setTimeout(() => {

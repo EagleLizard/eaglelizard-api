@@ -1,6 +1,6 @@
 
 import sharp from 'sharp';
-import { Readable } from 'stream';
+import { PassThrough, Readable } from 'stream';
 
 const JPEG_MIME_TYPE = 'image/jpeg';
 
@@ -8,15 +8,18 @@ export interface ImageTransformOpts {
   imageStream: Readable;
   contentType: string;
   width: number;
+  cacheStream?: PassThrough;
 }
 
 export function imageTransform(imageTransformOpts: ImageTransformOpts): Readable {
-  let imageStream: Readable, contentType: string, width: number;
+  let imageStream: Readable, contentType: string, width: number,
+    cacheStream: PassThrough;
   let sharpTransformer: sharp.Sharp;
   ({
     imageStream,
     contentType,
     width,
+    cacheStream,
   } = imageTransformOpts);
 
   sharpTransformer = sharp().resize({
@@ -30,7 +33,9 @@ export function imageTransform(imageTransformOpts: ImageTransformOpts): Readable
       quality: 100,
     });
   }
-
+  if(cacheStream !== undefined) {
+    sharpTransformer.pipe(cacheStream);
+  }
   return imageStream.pipe(sharpTransformer);
 }
 
