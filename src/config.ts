@@ -11,6 +11,7 @@ const APP_ROOT = path.resolve(__dirname, '..');
 const RUNTIME_ENV = process.env.NODE_ENV || 'development';
 const GCP_PROJECT_ID = process.env.GCP_PROJECT_ID;
 const aws_access_key_id = process.env.aws_access_key_id;
+const APP_ENV = process.env.APP_ENV;
 
 (() => {
   try {
@@ -27,6 +28,7 @@ export const config = {
   RUNTIME_ENV,
   GCP_PROJECT_ID,
   aws_access_key_id,
+  APP_ENV,
 };
 
 function init() {

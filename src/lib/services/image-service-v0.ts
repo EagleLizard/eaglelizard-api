@@ -1,60 +1,97 @@
 
-import * as AWS from 'aws-sdk';
-import { Readable } from 'stream';
+import { PassThrough, Readable } from 'stream';
 
 import {
-  getS3Secret,
-  AwsS3Secret,
-} from './gcp-auth-service';
+  getS3ImageStream,
+  ImageStream,
+} from './aws-s3-service';
+import {
+  imageTransform,
+} from '../modules/image-transform';
+import { MemCache } from '../modules/mem-cache/mem-cache';
+import { getHasher, Hasher } from '../modules/hasher';
+import { CacheFile } from '../modules/mem-cache/cache-file';
 
-export interface S3ImageStream {
-  headers: Record<string, string>;
-  s3Stream: Readable;
+export const MEM_CACHE = new MemCache;
+
+export async function getImageTransformStream(imageKey: string, folderKey: string, width?: number): Promise<ImageStream> {
+  let imageStream: ImageStream, contentStream: Readable, headers: Record<string, string>;
+
+  imageStream = await getImageStream(imageKey, folderKey);
+  contentStream = imageStream.stream;
+  headers = imageStream.headers;
+  if(width !== undefined) {
+    contentStream = imageTransform({
+      imageStream: imageStream.stream,
+      contentType: headers['content-type'],
+      width,
+    });
+  }
+  return {
+    stream: contentStream,
+    headers,
+  };
 }
 
-export async function getImageTransformStream(imageKey: string, folderKey: string, width?: number): Promise<S3ImageStream> {
-  let imageStream: S3ImageStream;
-  imageStream = await getImageStream(imageKey, folderKey, width);
+async function getImageStream(imageKey: string, folderKey: string, width?: number): Promise<ImageStream> {
+  let hasInCache: boolean;
+  let imageStream: ImageStream;
+  hasInCache = MEM_CACHE.has(imageKey, folderKey, width);
+  imageStream = hasInCache
+    ? getCacheStream(imageKey, folderKey, width)
+    : await getS3ImageStreamAndCache(imageKey, folderKey, width)
+  ;
   return imageStream;
 }
 
-async function getImageStream(imageKey: string, folderKey: string, width: number): Promise<S3ImageStream> {
-  let s3: AWS.S3, s3Request: AWS.Request<AWS.S3.GetObjectOutput, AWS.AWSError>;
-  let s3ImageStream: S3ImageStream;
+function getCacheStream(imageKey: string, folderKey: string, width?: number): ImageStream {
+  let cacheFile: CacheFile, contentType: string, contentStream: Readable;
+  let imageStream: ImageStream, headers: Record<string, string>;
 
-  /*
-    TODO: Implement width transform with sharp
-  */
-  console.log(`width: ${width}`);
-
-  s3 = await getAwsS3();
-  return new Promise((resolve, reject) => {
-    let s3Stream: Readable;
-    console.log(`${folderKey}/${imageKey}`);
-    s3Request = s3.getObject({
-      Bucket: 'elasticbeanstalk-us-west-1-297608881144' + folderKey,
-      Key: imageKey
-    });
-
-    s3Request.on('httpHeaders', (status, headers) => {
-      s3ImageStream = {
-        headers,
-        s3Stream,
-      };
-      resolve(s3ImageStream);
-    });
-
-    s3Stream = s3Request.createReadStream();
-  });
+  cacheFile = MEM_CACHE.get(imageKey, folderKey, width);
+  contentType = cacheFile.contentType;
+  contentStream = new Readable;
+  contentStream.push(Buffer.from(cacheFile.data, 'binary'));
+  contentStream.push(null);
+  headers = {
+    'content-type': contentType,
+  };
+  imageStream = {
+    headers,
+    stream: contentStream,
+  };
+  return imageStream;
 }
 
-async function getAwsS3(): Promise<AWS.S3> {
-  let awsS3Secret: AwsS3Secret, s3: AWS.S3;
-  awsS3Secret = await getS3Secret();
-  s3 = new AWS.S3({
-    region: 'us-west-1',
-    accessKeyId: awsS3Secret.id,
-    secretAccessKey: awsS3Secret.secret,
+async function getS3ImageStreamAndCache(imageKey: string, folderKey: string, width?: number): Promise<ImageStream> {
+  let imageStream: ImageStream, headers: Record<string, string>;
+  let cacheStream: PassThrough, imageDataChunks: string[], hasher: Hasher,
+    imageData: string;
+
+  cacheStream = new PassThrough();
+  cacheStream.setEncoding('binary');
+
+  imageStream = await getS3ImageStream({
+    imageKey,
+    folderKey,
+    cacheStream,
   });
-  return s3;
+  headers = imageStream.headers;
+
+  imageDataChunks = [];
+  hasher = getHasher();
+
+  cacheStream.on('data', (chunk) => {
+    hasher.update(chunk);
+    imageDataChunks.push(chunk);
+  });
+
+  cacheStream.on('end', () => {
+    imageData = imageDataChunks.join('');
+
+    if(!MEM_CACHE.has(imageKey, folderKey, width)) {
+      MEM_CACHE.set(imageData, headers['content-type'], hasher.digest(), imageKey, folderKey);
+    }
+  });
+  return imageStream;
 }

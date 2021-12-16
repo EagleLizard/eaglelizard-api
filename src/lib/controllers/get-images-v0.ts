@@ -2,11 +2,12 @@
 import { Request, Response } from 'express';
 import { Readable } from 'stream';
 
-import { getImageTransformStream, S3ImageStream } from '../services/image-service-v0';
+import { getImageTransformStream } from '../services/image-service-v0';
+import { ImageStream } from '../services/aws-s3-service';
 
 export async function getImagesV0(req: Request, res: Response) {
   let imageKey: string, folderKey: string, widthParam: string, width: number;
-  let s3ImageStream: S3ImageStream,
+  let s3ImageStream: ImageStream,
     headers: Record<string, string>,
     imageStream: Readable
   ;
@@ -24,10 +25,9 @@ export async function getImagesV0(req: Request, res: Response) {
 
   s3ImageStream = await getImageTransformStream(imageKey, folderKey, width);
   headers = s3ImageStream.headers;
-  imageStream = s3ImageStream.s3Stream;
+  imageStream = s3ImageStream.stream;
 
   res.setHeader('content-type', headers['content-type']);
-  res.setHeader('content-length', headers['content-length']);
   res.setHeader('Access-Control-Allow-Origin', '*');
   imageStream.pipe(res);
 }

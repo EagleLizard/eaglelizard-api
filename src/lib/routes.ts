@@ -9,7 +9,7 @@ export function registerRoutes(app: Express): Express {
 
   app.get('/health', getHealthcheck);
   app.get('/', getBaseRoute);
-  app.get('/images/v0/:folder/:image?', getImagesV0);
+  app.get('/image/v0/:folder/:image?', getImagesV0);
 
   return app;
 }
