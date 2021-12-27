@@ -7,6 +7,9 @@ import {
   getS3Secret,
   AwsS3Secret,
 } from './gcp-auth-service';
+import { awsSdkLogStream } from '../logger';
+
+AWS.config.logger = awsSdkLogStream;
 
 export interface GetS3ImageStreamOpts {
   imageKey: string;

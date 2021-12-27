@@ -43,3 +43,7 @@ function init() {
   ;
   PORT = isEnvPortValid ? (+process.env.PORT) : DEFAULT_PORT;
 }
+
+export function isDevEnv(): boolean {
+  return config.APP_ENV === 'dev';
+}

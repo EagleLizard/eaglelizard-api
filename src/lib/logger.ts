@@ -1,6 +1,8 @@
 
-import winston, { createLogger, format, transports } from 'winston';
-import { config } from '../config';
+import winston, { createLogger, format, transport, transports } from 'winston';
+import { LoggingWinston } from '@google-cloud/logging-winston';
+
+import { config, isDevEnv } from '../config';
 
 const levels = {
   error: 0,
@@ -28,9 +30,6 @@ const baseFormatConfig = [
   }),
   format.errors({ stack: true }),
   format.splat(),
-  format.colorize({
-    all: true,
-  }),
 ];
 
 const formatConfig = format.combine(
@@ -40,19 +39,10 @@ const formatConfig = format.combine(
   }),
 );
 
-const transportsConfig = [
-  new transports.File({
-    filename: `${config.APP_ROOT}/logs/eaglelizard-api.log`,
-    format: format.combine(
-      ...baseFormatConfig,
-      // format.json(),
-    )
-  }),
-  new transports.Console({
-    format: format.combine(
-      ...baseFormatConfig,
-    )
-  }),
+const transportsConfig: transport[] = [
+  getFileTransport(),
+  getConsoleTransport(),
+  getGCPTransport(),
 ];
 
 export const logger = createLogger({
@@ -62,3 +52,47 @@ export const logger = createLogger({
   defaultMeta: { service: 'eaglelizard-api' },
   transports: transportsConfig,
 });
+
+export const awsSdkLogStream = {
+  write: (msg: string) => {
+    logger.info(msg);
+  }
+};
+
+function getFileTransport(): transport {
+  let transportFormat: winston.Logform.Format[],
+    transport: transport;
+  transportFormat = [
+    ...baseFormatConfig,
+  ];
+  transport = new transports.File({
+    filename: `${config.APP_ROOT}/logs/eaglelizard-api.log`,
+    format: format.combine(...transportFormat),
+  });
+  return transport;
+}
+
+function getConsoleTransport(): transport {
+  let transportFormat: winston.Logform.Format[],
+    transport: transport;
+  transportFormat = [
+    ...baseFormatConfig,
+  ];
+  if(isDevEnv()) {
+    transportFormat.push(
+      format.colorize({
+        all: true,
+      }),
+    );
+  }
+  transport = new transports.Console({
+    format: format.combine(...transportFormat),
+  });
+  return transport;
+}
+
+function getGCPTransport(): transport {
+  let transport: transport;
+  transport = new LoggingWinston();
+  return transport;
+}

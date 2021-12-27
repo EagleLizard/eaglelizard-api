@@ -9,21 +9,21 @@ export class MemCache {
 
   get(imageKey: string, folderKey: string, width?: number) {
     let cacheKey: string;
-    cacheKey = this.getKey(imageKey, folderKey, width);
+    cacheKey = MemCache.getKey(imageKey, folderKey, width);
     return this.cacheMap.get(cacheKey);
   }
 
-  set(imageData: string, contentType: string, fileHash: string, imageKey: string, folderKey: string, width?: number) {
+  set(imageData: string, contentType: string, imageKey: string, folderKey: string, width?: number) {
     let cacheKey: string;
-    cacheKey = this.getKey(imageKey, folderKey, width);
+    cacheKey = MemCache.getKey(imageKey, folderKey, width);
     if(!this.cacheMap.has(cacheKey)) {
-      this.cacheMap.set(cacheKey, new CacheFile(imageData, contentType, fileHash));
+      this.cacheMap.set(cacheKey, new CacheFile(imageData, contentType));
     }
   }
 
   has(imageKey: string, folderKey: string, width?: number) {
     let cacheKey: string;
-    cacheKey = this.getKey(imageKey, folderKey, width);
+    cacheKey = MemCache.getKey(imageKey, folderKey, width);
     return this.cacheMap.has(cacheKey);
   }
 
@@ -35,7 +35,7 @@ export class MemCache {
     }, 0);
   }
 
-  private getKey(imageKey: string, folderKey: string, width?: number) {
+  static getKey(imageKey: string, folderKey: string, width?: number) {
     return `${imageKey}_${folderKey}_${width}`;
   }
 }
