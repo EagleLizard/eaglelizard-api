@@ -13,11 +13,32 @@ import { CacheFile } from '../modules/mem-cache/cache-file';
 
 export const MEM_CACHE = new MemCache;
 
-export async function getImageTransformStream(imageKey: string, folderKey: string, width?: number): Promise<ImageStream> {
-  let imageStream: ImageStream;
+export interface GetImageTransformStreamOpts {
+  imageKey: string,
+  folderKey: string,
+  width?: number;
+  height?: number;
+}
 
-  if(width !== undefined) {
-    imageStream = await getResizeImageStream(imageKey, folderKey, width);
+export async function getImageTransformStream(opts: GetImageTransformStreamOpts): Promise<ImageStream> {
+  let imageStream: ImageStream;
+  const {
+    imageKey,
+    folderKey,
+    width,
+    height,
+  } = opts;
+
+  if(
+    (width !== undefined)
+    || (height !== undefined)
+  ) {
+    imageStream = await getResizeImageStream({
+      imageKey,
+      folderKey,
+      width,
+      height,
+    });
   } else {
     imageStream = await getImageStream(imageKey, folderKey);
   }
@@ -27,9 +48,15 @@ export async function getImageTransformStream(imageKey: string, folderKey: strin
   };
 }
 
-async function getResizeImageStream(imageKey: string, folderKey: string, width: number): Promise<ImageStream> {
+async function getResizeImageStream(opts: GetImageTransformStreamOpts): Promise<ImageStream> {
   let contentStream: Readable, headers: Record<string, string>;
   let imageStream: ImageStream;
+  const {
+    imageKey,
+    folderKey,
+    width,
+    height,
+  } = opts;
 
   imageStream = await getImageStream(imageKey, folderKey);
   headers = imageStream.headers;
@@ -38,6 +65,7 @@ async function getResizeImageStream(imageKey: string, folderKey: string, width: 
     imageStream: imageStream.stream,
     contentType: headers['content-type'],
     width,
+    height,
   });
   return {
     stream: contentStream,
@@ -49,10 +77,16 @@ async function getResizeImageStream(imageKey: string, folderKey: string, width: 
   Probably will deprecate any thumbnail caching,
     it is not very effective and takes up space.
 */
-function getResizeImageStreamCached(imageKey: string, folderKey: string, width: number, imageStream: ImageStream): ImageStream {
+function getResizeImageStreamCached(imageStream: ImageStream, opts: GetImageTransformStreamOpts): ImageStream {
   let cacheImageStream: ImageStream, contentStream: Readable, headers: Record<string, string>;
   let cacheStream: PassThrough, imageDataChunks: string[], imageData: string;
   let hasInCache: boolean;
+  const {
+    imageKey,
+    folderKey,
+    width,
+    height,
+  } = opts;
 
   hasInCache = false;
 
@@ -79,6 +113,7 @@ function getResizeImageStreamCached(imageKey: string, folderKey: string, width: 
       imageStream: imageStream.stream,
       contentType: headers['content-type'],
       width,
+      height,
       cacheStream,
     });
   }

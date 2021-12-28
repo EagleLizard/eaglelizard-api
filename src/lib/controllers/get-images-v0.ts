@@ -26,11 +26,16 @@ export async function getImagesV0(req: Request, res: Response) {
   if(((typeof widthParam) === 'string') && !isNaN(+widthParam)) {
     width = +widthParam;
   }
-  if(((typeof height) === 'string') && !isNaN(+heightParam)) {
+  if(((typeof heightParam) === 'string') && !isNaN(+heightParam)) {
     height = +heightParam;
   }
 
-  s3ImageStream = await getImageTransformStream(imageKey, folderKey, width);
+  s3ImageStream = await getImageTransformStream({
+    imageKey,
+    folderKey,
+    width,
+    height,
+  });
   headers = s3ImageStream.headers;
   imageStream = s3ImageStream.stream;
 
