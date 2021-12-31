@@ -13,6 +13,8 @@ const GCP_PROJECT_ID = process.env.GCP_PROJECT_ID;
 const aws_access_key_id = process.env.aws_access_key_id;
 const APP_ENV = process.env.APP_ENV;
 
+const JCD_GCP_BUCKET = 'jcd-image-1';
+
 (() => {
   try {
     init();
@@ -29,6 +31,7 @@ export const config = {
   GCP_PROJECT_ID,
   aws_access_key_id,
   APP_ENV,
+  JCD_GCP_BUCKET,
 };
 
 function init() {

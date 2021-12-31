@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { Readable } from 'stream';
 
 import { getImageTransformStream } from '../services/image-service-v0';
-import { ImageStream } from '../services/aws-s3-service';
+import { ImageStream } from '../../models/image-stream';
 
 export async function getImagesV0(req: Request, res: Response) {
   let imageKey: string, folderKey: string, widthParam: string, width: number,

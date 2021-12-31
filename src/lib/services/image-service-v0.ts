@@ -3,22 +3,16 @@ import { PassThrough, Readable } from 'stream';
 
 import {
   getS3ImageStream,
-  ImageStream,
 } from './aws-s3-service';
+import { ImageStream } from '../../models/image-stream';
 import {
   imageTransform,
 } from '../modules/image-transform';
 import { MemCache } from '../modules/mem-cache/mem-cache';
 import { CacheFile } from '../modules/mem-cache/cache-file';
+import { GetImageTransformStreamOpts } from '../../models/image-stream';
 
 export const MEM_CACHE = new MemCache;
-
-export interface GetImageTransformStreamOpts {
-  imageKey: string,
-  folderKey: string,
-  width?: number;
-  height?: number;
-}
 
 export async function getImageTransformStream(opts: GetImageTransformStreamOpts): Promise<ImageStream> {
   let imageStream: ImageStream;
@@ -33,12 +27,7 @@ export async function getImageTransformStream(opts: GetImageTransformStreamOpts)
     (width !== undefined)
     || (height !== undefined)
   ) {
-    imageStream = await getResizeImageStream({
-      imageKey,
-      folderKey,
-      width,
-      height,
-    });
+    imageStream = await getResizeImageStream(opts);
   } else {
     imageStream = await getImageStream(imageKey, folderKey);
   }
@@ -77,7 +66,8 @@ async function getResizeImageStream(opts: GetImageTransformStreamOpts): Promise<
   Probably will deprecate any thumbnail caching,
     it is not very effective and takes up space.
 */
-function getResizeImageStreamCached(imageStream: ImageStream, opts: GetImageTransformStreamOpts): ImageStream {
+async function getResizeImageStreamCached(opts: GetImageTransformStreamOpts): Promise<ImageStream> {
+  let imageStream: ImageStream;
   let cacheImageStream: ImageStream, contentStream: Readable, headers: Record<string, string>;
   let cacheStream: PassThrough, imageDataChunks: string[], imageData: string;
   let hasInCache: boolean;
@@ -88,13 +78,14 @@ function getResizeImageStreamCached(imageStream: ImageStream, opts: GetImageTran
     height,
   } = opts;
 
-  hasInCache = false;
+  hasInCache = MEM_CACHE.has(imageKey, folderKey, width, height);
 
   if(hasInCache) {
-    cacheImageStream = getCacheStream(imageKey, folderKey, width);
+    cacheImageStream = getCacheStream(imageKey, folderKey, width, height);
     contentStream = cacheImageStream.stream;
     headers = cacheImageStream.headers;
   } else {
+    imageStream = await getImageStream(imageKey, folderKey);
     headers = imageStream.headers;
 
     cacheStream = new PassThrough;
@@ -106,7 +97,7 @@ function getResizeImageStreamCached(imageStream: ImageStream, opts: GetImageTran
     });
     cacheStream.on('end', () => {
       imageData = imageDataChunks.join('');
-      MEM_CACHE.set(imageData, headers['content-type'], imageKey, folderKey, width);
+      MEM_CACHE.set(imageData, headers['content-type'], imageKey, folderKey, width, height);
     });
 
     contentStream = imageTransform({
@@ -138,11 +129,11 @@ async function getImageStream(imageKey: string, folderKey: string, width?: numbe
   return imageStream;
 }
 
-function getCacheStream(imageKey: string, folderKey: string, width?: number): ImageStream {
+function getCacheStream(imageKey: string, folderKey: string, width?: number, height?: number): ImageStream {
   let cacheFile: CacheFile, contentType: string, contentStream: Readable;
   let imageStream: ImageStream, headers: Record<string, string>;
 
-  cacheFile = MEM_CACHE.get(imageKey, folderKey, width);
+  cacheFile = MEM_CACHE.get(imageKey, folderKey, width, height);
   contentType = cacheFile.contentType;
   contentStream = new Readable;
   contentStream.push(Buffer.from(cacheFile.data, 'binary'));
@@ -180,7 +171,6 @@ async function getS3ImageStreamAndCache(imageKey: string, folderKey: string, wid
 
   cacheStream.on('end', () => {
     imageData = imageDataChunks.join('');
-
     if(!MEM_CACHE.has(imageKey, folderKey, width)) {
       MEM_CACHE.set(imageData, headers['content-type'], imageKey, folderKey);
     }

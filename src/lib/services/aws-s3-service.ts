@@ -8,6 +8,7 @@ import {
   AwsS3Secret,
 } from './gcp-auth-service';
 import { awsSdkLogStream } from '../logger';
+import { ImageStream } from '../../models/image-stream';
 
 AWS.config.logger = awsSdkLogStream;
 
@@ -15,11 +16,6 @@ export interface GetS3ImageStreamOpts {
   imageKey: string;
   folderKey: string;
   cacheStream?: PassThrough;
-}
-
-export interface ImageStream {
-  headers: Record<string, string>;
-  stream: Readable;
 }
 
 export async function getS3ImageStream(opts: GetS3ImageStreamOpts): Promise<ImageStream> {

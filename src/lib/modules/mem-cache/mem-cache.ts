@@ -7,23 +7,23 @@ export class MemCache {
     this.cacheMap = new Map;
   }
 
-  get(imageKey: string, folderKey: string, width?: number) {
+  get(imageKey: string, folderKey: string, width?: number, height?: number) {
     let cacheKey: string;
-    cacheKey = MemCache.getKey(imageKey, folderKey, width);
+    cacheKey = MemCache.getKey(imageKey, folderKey, width, height);
     return this.cacheMap.get(cacheKey);
   }
 
-  set(imageData: string, contentType: string, imageKey: string, folderKey: string, width?: number) {
+  set(imageData: string, contentType: string, imageKey: string, folderKey: string, width?: number, height?: number) {
     let cacheKey: string;
-    cacheKey = MemCache.getKey(imageKey, folderKey, width);
+    cacheKey = MemCache.getKey(imageKey, folderKey, width, height);
     if(!this.cacheMap.has(cacheKey)) {
       this.cacheMap.set(cacheKey, new CacheFile(imageData, contentType));
     }
   }
 
-  has(imageKey: string, folderKey: string, width?: number) {
+  has(imageKey: string, folderKey: string, width?: number, height?: number) {
     let cacheKey: string;
-    cacheKey = MemCache.getKey(imageKey, folderKey, width);
+    cacheKey = MemCache.getKey(imageKey, folderKey, width, height);
     return this.cacheMap.has(cacheKey);
   }
 
@@ -35,7 +35,7 @@ export class MemCache {
     }, 0);
   }
 
-  static getKey(imageKey: string, folderKey: string, width?: number) {
-    return `${imageKey}_${folderKey}_${width}`;
+  static getKey(imageKey: string, folderKey: string, width?: number, height?: number) {
+    return `${imageKey}_${folderKey}_${width}_${height}`;
   }
 }
