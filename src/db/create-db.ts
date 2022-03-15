@@ -5,7 +5,7 @@ sourceMapSupport.install();
 import { Datastore, Entity, Key, Query, Transaction } from '@google-cloud/datastore';
 
 import { config } from '../config';
-import { JcdProject, JcdProjects, JCD_PROJECT_ORDER } from './jcd-projects';
+import { _JcdProject, JcdProjects, JCD_PROJECT_ORDER } from './jcd-projects';
 import { JCD_PROJECT_ENUM } from './jcd-constants';
 import { isNumber, isString } from '../lib/modules/type-validation/validate-primitives';
 import {
@@ -29,6 +29,7 @@ const db = new Datastore;
 async function createDb() {
   await createProjects();
   await createProjectList();
+  await createProjectPages();
 }
 
 async function createProjectList() {
@@ -81,7 +82,45 @@ async function createProjectList() {
     await transaction.rollback();
     throw e;
   }
+}
 
+async function createProjectPages() {
+  let transaction: Transaction;
+  console.log('createProjectPages');
+  transaction = db.transaction();
+  try {
+    for(let i = 0; i < JcdProjects.length; ++i) {
+      let currProject: _JcdProject;
+      currProject = JcdProjects[i];
+      createProjectPage(transaction, currProject);
+    }
+    await transaction.commit();
+  } catch(e) {
+    await transaction.rollback();
+    throw e;
+  }
+}
+
+function createProjectPage(transaction: Transaction, project: _JcdProject) {
+  let dbKey: Key;
+  dbKey = db.key([ 'JcdProjectPage', project.projectKey ]);
+  const jcdProjectPage = {
+    key: dbKey,
+    data: {
+      projectKey: project.projectKey,
+      galleryImageUris: project.projectPage.galleryImageUris,
+      projectDetails: {
+        org: project.projectPage.projectDetails.org,
+        month: project.projectPage.projectDetails.month,
+        year: project.projectPage.projectDetails.year,
+        credit: project.projectPage.projectDetails.credit,
+        credits: project.projectPage.projectDetails.credits,
+        mediaAndPress: project.projectPage.projectDetails.mediaAndPress,
+        originalCredits: project.projectPage.projectDetails.originalCredits,
+      },
+    },
+  };
+  transaction.save(jcdProjectPage);
 }
 
 async function createProjects() {
@@ -92,7 +131,7 @@ async function createProjects() {
   transaction = db.transaction();
   try {
     for(let i = 0; i < JcdProjects.length; ++i) {
-      let currProject: JcdProject;
+      let currProject: _JcdProject;
       currProject = JcdProjects[i];
       createProject(transaction, currProject);
     }
@@ -103,7 +142,7 @@ async function createProjects() {
   }
 }
 
-function createProject(transaction: Transaction, project: JcdProject) {
+function createProject(transaction: Transaction, project: _JcdProject) {
   // first create all of the image entities and get the ids
   let key: Key, orderIdx: number;
   key = db.key([ 'JcdProject', project.projectKey ]);
@@ -112,22 +151,10 @@ function createProject(transaction: Transaction, project: JcdProject) {
     key,
     data: {
       orderIndex: orderIdx,
-      name: project.title,
+      title: project.title,
       projectKey: project.projectKey,
       coverImageUri: project.coverImageUri,
-      projectPage: {
-        route: project.projectPage.route,
-        galleryImageUris: project.projectPage.galleryImageUris,
-        projectDetails: {
-          org: project.projectPage.projectDetails.org,
-          month: project.projectPage.projectDetails.month,
-          year: project.projectPage.projectDetails.year,
-          credit: project.projectPage.projectDetails.credit,
-          credits: project.projectPage.projectDetails.credits,
-          mediaAndPress: project.projectPage.projectDetails.mediaAndPress,
-          originalCredits: project.projectPage.projectDetails.originalCredits,
-        },
-      },
+      route: project.route,
     }
   };
   transaction.save(jcdProject);

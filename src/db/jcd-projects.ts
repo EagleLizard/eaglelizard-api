@@ -22,15 +22,13 @@ interface ProjectDetails {
 }
 
 interface ProjectPage {
-  route: string;
-  // galleryHeaderImageUri: string;
-  // galleryDetailImageUri: string;
   galleryImageUris: string[];
 
   projectDetails: ProjectDetails;
 }
 
-export interface JcdProject {
+export interface _JcdProject {
+  route: string;
   title: string;
   projectKey: JCD_PROJECT_ENUM;
   coverImageUri: string;
@@ -55,13 +53,13 @@ export const JCD_PROJECT_ORDER: JCD_PROJECT_ENUM[] = [
   JCD_PROJECT_ENUM.CABARET,
 ];
 
-export const JcdProjects: JcdProject[] = [
+export const JcdProjects: _JcdProject[] = [
   {
     title: 'James and the Giant Peach',
     projectKey: JCD_PROJECT_ENUM.JAMES_AND_THE_GIANT_PEACH,
     coverImageUri: 'jamesandthegiantpeach.jpg',
+    route: 'james-and-the-giant-peach',
     projectPage: {
-      route: 'james-and-the-giant-peach',
       galleryImageUris: [
         'jamesandthegiantpeach/jamesandthegiantpeach1.jpg',
         'jamesandthegiantpeach/jamesandthegiantpeach2.jpg',
@@ -113,8 +111,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'Cinderella Eats Rice and Beans',
     projectKey: JCD_PROJECT_ENUM.CINDERELLA,
     coverImageUri: 'cinderella.jpg',
+    route: 'cinderella',
     projectPage: {
-      route: 'cinderella',
       galleryImageUris: [
         'cinderella/cinderella1.jpg',
         'cinderella/cinderella2.jpg',
@@ -148,8 +146,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'Sweeney Todd: The Demon Barber of Fleet Street',
     projectKey: JCD_PROJECT_ENUM.SWEENEY,
     coverImageUri: 'sweeneytodd.jpg',
+    route: 'sweeney-todd',
     projectPage: {
-      route: 'sweeney-todd',
       galleryImageUris: [
         'sweeneytodd/sweeneytodd14.jpg',
         'sweeneytodd/sweeneytodd9.jpg',
@@ -227,8 +225,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'Urinetown: The Musical',
     projectKey: JCD_PROJECT_ENUM.URINETOWN,
     coverImageUri: 'urinetown.jpg',
+    route: 'urinetown-the-musical',
     projectPage: {
-      route: 'urinetown-the-musical',
       galleryImageUris: [
         'urinetown/urinetown1.jpg',
         'urinetown/urinetown2.jpg',
@@ -281,8 +279,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'Taming of the Shrew',
     projectKey: JCD_PROJECT_ENUM.TAMINGOFTHESHREW,
     coverImageUri: 'tamingoftheshrew.jpg',
+    route: 'taming-of-the-shrew',
     projectPage: {
-      route: 'taming-of-the-shrew',
       galleryImageUris: [
         'tamingoftheshrew/tamingoftheshrew1.jpg',
         'tamingoftheshrew/tamingoftheshrew2.jpg',
@@ -327,8 +325,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'Mr. Burns: A Post-Electric Play',
     projectKey: JCD_PROJECT_ENUM.MRBURNS,
     coverImageUri: 'mrburns.jpg',
+    route: 'mr-burns',
     projectPage: {
-      route: 'mr-burns',
       galleryImageUris: [
         'mrburns/mrburns1.jpg',
         'mrburns/mrburns2.jpg',
@@ -381,8 +379,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'The Laramie Project',
     projectKey: JCD_PROJECT_ENUM.LARAMIE,
     coverImageUri: 'laramie_min.jpg',
+    route: 'the-laramie-project',
     projectPage: {
-      route: 'the-laramie-project',
       galleryImageUris: [
         'laramie/laramie1.jpg',
         'laramie/laramie2.jpg',
@@ -446,8 +444,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'The Drag',
     projectKey: JCD_PROJECT_ENUM.THE_DRAG,
     coverImageUri: 'thedrag.jpg',
+    route: 'the-drag',
     projectPage: {
-      route: 'the-drag',
       galleryImageUris: [
         'thedrag/thedrag1.jpg',
         'thedrag/thedrag2.jpg',
@@ -493,8 +491,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'Next Fall',
     projectKey: JCD_PROJECT_ENUM.NEXT_FALL,
     coverImageUri: 'nextfall.jpg',
+    route: 'next-fall',
     projectPage: {
-      route: 'next-fall',
       galleryImageUris: [
         'nextfall/nextfall1.jpg',
         'nextfall/nextfall2.jpg',
@@ -539,8 +537,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'Agamemnon',
     projectKey: JCD_PROJECT_ENUM.AGAMEMNON,
     coverImageUri: 'agamemnon.jpg',
+    route: 'agamemnon',
     projectPage: {
-      route: 'agamemnon',
       galleryImageUris: [
         'agamemnon/agamemnon1.jpg',
         'agamemnon/agamemnon2.jpg',
@@ -580,8 +578,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'Tribes',
     projectKey: JCD_PROJECT_ENUM.TRIBES,
     coverImageUri: 'tribes.jpg',
+    route: 'tribes',
     projectPage: {
-      route: 'tribes',
       galleryImageUris: [
         'tribes/tribes1.jpg',
         'tribes/tribes2.jpg',
@@ -621,8 +619,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'Fat Pig',
     projectKey: JCD_PROJECT_ENUM.FAT_PIG,
     coverImageUri: 'fatpig.jpg',
+    route: 'fat-pig',
     projectPage: {
-      route: 'fat-pig',
       galleryImageUris: [
         'fatpig/fatpig1.jpg',
         'fatpig/fatpig2.jpg',
@@ -667,8 +665,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'A Year with Frog and Toad',
     projectKey: JCD_PROJECT_ENUM.UVU,
     coverImageUri: 'utahvalleyuniversity.jpg',
+    route: 'a-year-with-frog-and-toad',
     projectPage: {
-      route: 'a-year-with-frog-and-toad',
       galleryImageUris: [
         'uvu/uvu1.jpg',
         'uvu/uvu2.jpg',
@@ -711,8 +709,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'Joseph and the Amazing Technicolor Dreamcoat',
     projectKey: JCD_PROJECT_ENUM.SUNDANCE,
     coverImageUri: 'sundancesummertheatre.jpg',
+    route: 'joseph-and-the-amazing-technicolor-dreamcoat',
     projectPage: {
-      route: 'joseph-and-the-amazing-technicolor-dreamcoat',
       galleryImageUris: [
         'sundance/sundance1.jpg',
         'sundance/sundance2.jpg',
@@ -760,8 +758,8 @@ export const JcdProjects: JcdProject[] = [
     title: 'Cabaret',
     projectKey: JCD_PROJECT_ENUM.CABARET,
     coverImageUri: 'cabaret.jpg',
+    route: 'cabaret',
     projectPage: {
-      route: 'cabaret',
       galleryImageUris: [
         'cabaret/cabaret1.jpg',
         'cabaret/cabaret2.jpg',

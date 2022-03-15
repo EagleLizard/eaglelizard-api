@@ -6,6 +6,7 @@ import {
 import {
   isString,
 } from '../../modules/type-validation/validate-primitives';
+import { JcdProject, JcdProjectPage } from '../../../models/jcd-entities';
 
 export class JcdService {
   static async getJcdProjectKeys(): Promise<string[]> {
@@ -26,6 +27,43 @@ export class JcdService {
       return projectKeyEntity.projectKey;
     });
     return projectKeys;
+  }
+
+  static async getJcdProjects(): Promise<JcdProject[]> {
+    let query: Query, projectEntities: any[];
+    let projects: JcdProject[];
+    query = GcpDbService.gcpDb
+      .createQuery('JcdProject')
+      .order('orderIndex')
+    ;
+    [ projectEntities ] = await query.run();
+    projects = projectEntities.map(JcdProject.deserialize);
+    return projects;
+  }
+
+  static async getJcdProject(projectRoute: string): Promise<JcdProject> {
+    let query: Query, projectEntity: any;
+    let project: JcdProject;
+    query = GcpDbService.gcpDb
+      .createQuery('JcdProject')
+      .filter('route', '=', projectRoute)
+    ;
+    [ projectEntity ] = await query.run();
+    project = JcdProject.deserialize(projectEntity[0]);
+
+    return project;
+  }
+
+  static async getJcdProjectPage(projectKey: string): Promise<JcdProjectPage> {
+    let query: Query, projectPageEntity: any;
+    let projectPage: JcdProjectPage;
+    query = GcpDbService.gcpDb
+      .createQuery('JcdProjectPage')
+      .filter('projectKey', '=', projectKey)
+    ;
+    [ projectPageEntity ] = await query.run();
+    projectPage = JcdProjectPage.deserialize(projectPageEntity[0]);
+    return projectPage;
   }
 }
 

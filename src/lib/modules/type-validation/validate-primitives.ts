@@ -12,3 +12,24 @@ export function isNumber(val: unknown): boolean {
   }
   return false;
 }
+
+export function isObject(val: unknown): boolean {
+  if(
+    ((typeof val) === 'object')
+    && !isNull(val)
+  ) {
+    return true;
+  }
+  return false;
+}
+
+export function isNull(val: unknown): boolean {
+  if(val === null) {
+    return true;
+  }
+  return false;
+}
+
+export function isUndefined(val: unknown): boolean {
+  return val === undefined;
+}

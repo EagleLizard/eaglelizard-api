@@ -6,6 +6,7 @@ import { config } from './config';
 import { registerRoutes } from './lib/routes';
 import { logger } from './lib/logger';
 import { logMiddleware } from './lib/middleware/log-middleware';
+import { corsMiddleware } from './lib/middleware/cors-middleware';
 import { MemLogger } from './lib/modules/mem-logger';
 import { MEM_CACHE } from './lib/services/image-service-v0';
 
@@ -23,6 +24,7 @@ export async function initServer() {
     app = express();
 
     app.use(logMiddleware);
+    app.use(corsMiddleware);
 
     app = registerRoutes(app);
 
