@@ -13,11 +13,10 @@ import { PassThrough, Readable } from 'stream';
 import { config } from '../../config';
 import { ImageStream } from '../../models/image-stream';
 
-let gcpStorage: Storage, jcdBucket: Bucket;
+let gcpStorage: Storage;
 
 (function initGcpStorage() {
   gcpStorage = new Storage;
-  jcdBucket = gcpStorage.bucket(config.JCD_GCP_BUCKET);
 })();
 
 export interface GetGcpImageStreamOpts {
@@ -27,10 +26,14 @@ export interface GetGcpImageStreamOpts {
 }
 
 export async function getGcpImageStream(opts: GetGcpImageStreamOpts): Promise<ImageStream> {
+  let jcdBucket: Bucket;
   let imageStream: ImageStream, imageReadStream: Readable;
   let bucketFile: string, remoteFile: File, fileMetaResponse: GetFileMetadataResponse,
     fileMetadata: Metadata;
   let headers: Record<string, string>;
+
+  jcdBucket = gcpStorage.bucket(config.JCD_GCP_BUCKET);
+
   if(opts.folderKey === undefined) {
     bucketFile = opts.imageKey;
   } else {

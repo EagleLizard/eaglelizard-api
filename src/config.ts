@@ -14,6 +14,7 @@ const aws_access_key_id = process.env.aws_access_key_id;
 const APP_ENV = process.env.APP_ENV;
 
 const JCD_GCP_BUCKET = 'jcd-image-1';
+const JCD_V3_GCP_BUCKET = 'jcd-image-v3';
 
 (() => {
   try {
@@ -32,6 +33,7 @@ export const config = {
   aws_access_key_id,
   APP_ENV,
   JCD_GCP_BUCKET,
+  JCD_V3_GCP_BUCKET,
 };
 
 function init() {
