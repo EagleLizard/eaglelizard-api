@@ -6,6 +6,14 @@ import {
 } from '../../lib/modules/type-validation/validate-primitives';
 import { JcdTypeError } from '../jcd-type-error';
 
+enum JCD_V3_IMAGE_TYPE_ENUM {
+  TITLE = 'TITLE',
+  GALLERY = 'GALLERY',
+}
+
+// export type JcdV3ImageType = JCD_V3_IMAGE_TYPE_ENUM.TITLE | JCD_V3_IMAGE_TYPE_ENUM.GALLERY;
+type JcdV3ImageType = `${JCD_V3_IMAGE_TYPE_ENUM}`;
+
 export class JcdV3Image {
   constructor(
     public id: string,
@@ -13,22 +21,22 @@ export class JcdV3Image {
     public bucketFile: string,
     public orderIdx: number,
     public active: boolean,
-    public imageType: string,
+    public imageType: JcdV3ImageType,
   ) {}
 
   static deserialize(rawImg: unknown): JcdV3Image {
-    let jcdImageV3: JcdV3Image;
+    let jcdImageV3: Record<string, unknown>;
     let id: string,
       projectKey: string,
       bucketFile: string,
       orderIdx: number,
       active: boolean,
-      imageType: string
+      imageType: JcdV3ImageType
     ;
     if(!isObject(rawImg)) {
       throw new JcdTypeError('object');
     }
-    jcdImageV3 = rawImg as JcdV3Image;
+    jcdImageV3 = rawImg as Record<string, unknown>;
 
     if(!isString(jcdImageV3.id)) {
       throw new JcdTypeError('string');
@@ -46,8 +54,8 @@ export class JcdV3Image {
     if(!isBoolean(jcdImageV3.active)) {
       throw new JcdTypeError('boolean');
     }
-    if(!isString(jcdImageV3.imageType)) {
-      throw new JcdTypeError('string');
+    if(!isJcdV3ImageType(jcdImageV3.imageType)) {
+      throw new JcdTypeError('JcdV3ImageType');
     }
 
     id = jcdImageV3.id;
@@ -76,9 +84,16 @@ export class JcdV3Image {
     let fileNameWithExt: string, fileName: string;
     fileNameWithExt = bucketPath.split('/').at(-1);
     fileName = fileNameWithExt?.split('.')[0];
-    if(!isString(fileName) || fileName.length < 1) {
+    if(!isString(fileName) || (fileName?.length ?? -Infinity) < 1) {
       throw new Error(`Failed to parse v3 image id from path: ${bucketPath}`);
     }
     return fileName;
   }
+}
+
+function isJcdV3ImageType(val: unknown): val is JcdV3ImageType {
+  if(isString(val)) {
+    return Object.values(JCD_V3_IMAGE_TYPE_ENUM).includes(val as JCD_V3_IMAGE_TYPE_ENUM);
+  }
+  return false;
 }
