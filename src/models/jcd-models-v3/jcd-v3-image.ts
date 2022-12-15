@@ -2,7 +2,8 @@
 import {
   isBoolean,
   isNumber,
-  isObject, isString,
+  isObject,
+  isString,
 } from '../../lib/modules/type-validation/validate-primitives';
 import { JcdTypeError } from '../jcd-type-error';
 

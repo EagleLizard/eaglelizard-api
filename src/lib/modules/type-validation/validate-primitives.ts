@@ -37,3 +37,10 @@ export function isUndefined(val: unknown): val is undefined {
 export function isBoolean(val: unknown): val is boolean {
   return (typeof val) === 'boolean';
 }
+
+export function isStringArray(val: unknown): val is string[] {
+  return (
+    Array.isArray(val)
+    && val.every(isString)
+  );
+}
