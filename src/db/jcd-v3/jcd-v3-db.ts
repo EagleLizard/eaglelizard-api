@@ -31,8 +31,8 @@ async function jcdV3DbMain() {
   await createJcdV3Keys(gcpDb);
   console.log('createJcdV3ProjectOrders...');
   await createJcdV3ProjectOrders(gcpDb);
-  // console.log('createJcdV3Images...');
-  // await createJcdV3ProjectImages();
+  console.log('createJcdV3Images...');
+  await createJcdV3ProjectImages();
 
   // console.log(jcdV3ProjectKeys);
   // const bucketv3 = gcpStorage.bucket(config.JCD_V3_GCP_BUCKET);
@@ -44,9 +44,6 @@ async function jcdV3DbMain() {
 }
 
 async function createJcdV3ProjectImages() {
-  let jcdV3Images: JcdV3Image[];
-  jcdV3Images = [];
-
   let jcdV3ImageProjectBases: JcdV3ImageProjectBase[];
   jcdV3ImageProjectBases = [];
 
@@ -75,11 +72,13 @@ async function createJcdV3ProjectImages() {
 
 async function createJcdV3ProjectImage(jcdV3ImageProjectBase: JcdV3ImageProjectBase) {
   let transaction: Transaction;
-  let jcdV3ProjectKeyId: JCD_V3_PROJECT_ENUM, jcdV3Images: JcdV3Image[];
+  let imageQuery: Query, imageDbEntities: any[];
+  let currJcdV3Images: JcdV3Image[];
+  let jcdV3ProjectKeyId: JCD_V3_PROJECT_ENUM, nextJcdV3Images: JcdV3Image[];
   let titleImagePath: string, titleJcdV3Image: JcdV3Image;
 
   jcdV3ProjectKeyId = jcdV3ImageProjectBase.projectKey;
-  jcdV3Images = [];
+  nextJcdV3Images = [];
   titleImagePath = jcdV3ImageProjectBase.titleImgUri;
   titleJcdV3Image = {
     id: JcdV3Image.getIdFromBucketPath(titleImagePath),
@@ -89,7 +88,7 @@ async function createJcdV3ProjectImage(jcdV3ImageProjectBase: JcdV3ImageProjectB
     active: true,
     imageType: 'TITLE',
   };
-  jcdV3Images.push(titleJcdV3Image);
+  nextJcdV3Images.push(titleJcdV3Image);
   jcdV3ImageProjectBase.galleryImgUris.forEach((galleryImageUri, idx) => {
     let galleryJcdV3Image: JcdV3Image, galleryImageId: string;
     galleryImageId = JcdV3Image.getIdFromBucketPath(galleryImageUri);
@@ -101,14 +100,14 @@ async function createJcdV3ProjectImage(jcdV3ImageProjectBase: JcdV3ImageProjectB
       active: true,
       imageType: 'GALLERY',
     };
-    jcdV3Images.push(galleryJcdV3Image);
+    nextJcdV3Images.push(galleryJcdV3Image);
   });
 
   /*
     Run the plain JcdV3Images through the deserialize function to enforce
       type safety
   */
-  jcdV3Images = jcdV3Images.map(jcdV3Image => {
+  nextJcdV3Images = nextJcdV3Images.map(jcdV3Image => {
     try {
       return JcdV3Image.deserialize(jcdV3Image);
     } catch(e) {
@@ -117,9 +116,36 @@ async function createJcdV3ProjectImage(jcdV3ImageProjectBase: JcdV3ImageProjectB
     }
   });
 
+  imageQuery = gcpDb
+    .createQuery('JcdImageV3')
+    .filter('projectKey', '=', jcdV3ProjectKeyId)
+  ;
+  [ imageDbEntities ] = await imageQuery.run();
+  currJcdV3Images = imageDbEntities.map(JcdV3Image.deserialize);
+
+  nextJcdV3Images = nextJcdV3Images
+    .filter(nextJcdV3Image => {
+      let foundCurrJcdV3ImageIdx: number;
+      foundCurrJcdV3ImageIdx = currJcdV3Images
+        .findIndex(currJcdV3Image => {
+          return (
+            (currJcdV3Image.id === nextJcdV3Image.id)
+            && (currJcdV3Image.imageType === nextJcdV3Image.imageType)
+            && (currJcdV3Image.orderIdx === nextJcdV3Image.orderIdx)
+            && (currJcdV3Image.bucketFile === nextJcdV3Image.bucketFile)
+            && (currJcdV3Image.active === nextJcdV3Image.active)
+          );
+        });
+      return foundCurrJcdV3ImageIdx === -1;
+    });
+  console.log(`nextJcdV3Images ${jcdV3ProjectKeyId}:`);
+  console.log(nextJcdV3Images);
+
+  // return;
+
   transaction = gcpDb.transaction();
 
-  jcdV3Images.forEach(jcdV3Image => {
+  nextJcdV3Images.forEach(jcdV3Image => {
     let dbKey: Key;
     dbKey = gcpDb.key([ 'JcdImageV3', jcdV3Image.id ]);
     transaction.upsert({
