@@ -84,6 +84,6 @@ export const JCD_V3_PROJECT_ORDER_BASE: JcdV3ProjectOrder[] = [
   },
   {
     projectKey: JCD_V3_PROJECT_ENUM.TRIBES,
-    orderIdx: 15
+    orderIdx: 15,
   },
 ];
