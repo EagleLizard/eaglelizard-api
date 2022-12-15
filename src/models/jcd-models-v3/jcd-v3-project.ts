@@ -8,6 +8,8 @@ import {
 } from '../../lib/modules/type-validation/validate-primitives';
 import { JcdTypeError } from '../jcd-type-error';
 
+import _isEqual from 'lodash.isequal';
+
 export class JcdV3Project {
 
   constructor(
@@ -111,7 +113,10 @@ export class JcdV3Project {
       productionCredits,
       mediaAndPress,
     );
+  }
 
+  static equals(jcdV3ProjectA: JcdV3Project, jcdV3ProjectB: JcdV3Project): boolean {
+    return _isEqual(jcdV3ProjectA, jcdV3ProjectB);
   }
 }
 
