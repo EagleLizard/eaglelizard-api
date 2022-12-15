@@ -21,7 +21,7 @@ export const JCD_V3_PROJECT_LIST: JCD_V3_PROJECT_ENUM[] = [
   JCD_V3_PROJECT_ENUM.TRIBES,
 ];
 
-export const JCD_V3_PROJECT_ORDER_BASE: JcdV3ProjectOrder[] = [
+export const JCD_V3_PROJECT_ORDER_BASES: JcdV3ProjectOrder[] = [
   {
     projectKey: JCD_V3_PROJECT_ENUM.THE_TALES_OF_HOFFMANN,
     orderIdx: 0,

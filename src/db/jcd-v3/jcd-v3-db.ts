@@ -1,16 +1,15 @@
 
-import { Datastore, Entity, Key, Query, Transaction } from '@google-cloud/datastore';
+import { Datastore, Key, Query, Transaction } from '@google-cloud/datastore';
 import { Storage } from '@google-cloud/storage';
 
 import { config } from '../../config';
-import { JcdProject } from '../../models/jcd-entities';
-import { JcdV3ProjectKey } from '../../models/jcd-models-v3/jcd-v3-project-key';
-import { JcdV3ProjectOrder } from '../../models/jcd-models-v3/jcd-v3-project-order';
 import { JcdV3Image } from '../../models/jcd-models-v3/jcd-v3-image';
-import { JCD_V3_PROJECT_LIST, JCD_V3_PROJECT_ORDER_BASE as JCD_V3_PROJECT_ORDER_BASES } from './jcd-v3-project-list';
+import { JCD_V3_PROJECT_LIST } from './jcd-v3-project-list';
 import { JcdV3ImageProjectBase, JCD_V3_IMAGE_PROJECT_BASES } from './jcd-v3-images-base';
 import { JCD_V3_PROJECT_ENUM } from './jcd-v3-project-enum';
-// import { JCD_PROJECT_ENUM as JCD_V3_PROJECT_ENUM } from '../jcd-constants';
+
+import { createJcdV3Keys } from './jcd-v3-create/create-jcd-v3-project-keys';
+import { createJcdV3ProjectOrders } from './jcd-v3-create/create-jcd-v3-project-orders';
 
 const gcpDb = new Datastore;
 
@@ -29,9 +28,9 @@ const gcpDb = new Datastore;
 async function jcdV3DbMain() {
   console.log('Jcd V3 DB Create');
   console.log('createJcdV3Keys...');
-  await createJcdV3Keys();
+  await createJcdV3Keys(gcpDb);
   console.log('createJcdV3ProjectOrders...');
-  await createJcdV3ProjectOrders();
+  await createJcdV3ProjectOrders(gcpDb);
   // console.log('createJcdV3Images...');
   // await createJcdV3ProjectImages();
 
@@ -42,127 +41,6 @@ async function jcdV3DbMain() {
   // filesV3.forEach(file => {
   //   console.log(file.name);
   // });
-}
-
-async function createJcdV3Keys() {
-  let transaction: Transaction;
-  let projecKeysQuery: Query, projectKeyDbEntities: unknown[];
-  let currJcdV3ProjectKeys: JcdV3ProjectKey[], nextJcdV3ProjectKeys: JcdV3ProjectKey[];
-
-  projecKeysQuery = gcpDb.createQuery('JcdProjectKeyV3');
-  [ projectKeyDbEntities ] = await projecKeysQuery.run();
-
-  currJcdV3ProjectKeys = projectKeyDbEntities.map(JcdV3ProjectKey.deserialize);
-  // console.log(currJcdV3ProjectKeys);
-  nextJcdV3ProjectKeys = JCD_V3_PROJECT_LIST.map(jcdV3ProjectEnumKey => {
-    return new JcdV3ProjectKey(
-      jcdV3ProjectEnumKey,
-      true,
-    );
-  });
-
-  nextJcdV3ProjectKeys = nextJcdV3ProjectKeys
-    .filter(nextJcdV3ProjectKey => {
-      let foundCurrJcdV3ProjectKeyIdx: number;
-      foundCurrJcdV3ProjectKeyIdx = currJcdV3ProjectKeys
-        .findIndex(currJcdV3ProjectKey => {
-          return currJcdV3ProjectKey.projectKey === nextJcdV3ProjectKey.projectKey;
-        });
-      return foundCurrJcdV3ProjectKeyIdx === -1;
-    });
-
-  transaction = gcpDb.transaction();
-
-  nextJcdV3ProjectKeys.forEach(jcdV3ProjectKeyEntity => {
-    let dbKey: Key;
-    dbKey  = gcpDb.key([ 'JcdProjectKeyV3', jcdV3ProjectKeyEntity.projectKey ]);
-    transaction.upsert({
-      key: dbKey,
-      data: {
-        projectKey: jcdV3ProjectKeyEntity.projectKey,
-        active: jcdV3ProjectKeyEntity.active,
-      },
-    });
-  });
-
-  try {
-    await transaction.commit();
-  } catch(e) {
-    await transaction.rollback();
-    throw e;
-  }
-}
-
-async function createJcdV3ProjectOrders() {
-  let transaction: Transaction;
-  let projectOrderQuery: Query, projectOrderDbEntities: any[];
-  let currJcdV3ProjectOrders: JcdV3ProjectOrder[], nextJcdV3ProjectOrders: JcdV3ProjectOrder[];
-
-  nextJcdV3ProjectOrders = [];
-
-  JCD_V3_PROJECT_ORDER_BASES.forEach(jcdV3ProjectOrderBase => {
-    let foundProjectOrderWithOrderIdx: JcdV3ProjectOrder,
-      foundProjectOrderWithProjectKey: JcdV3ProjectOrder
-    ;
-    // enforce uniqueness
-    foundProjectOrderWithOrderIdx = nextJcdV3ProjectOrders.find(existingJcdV3ProjectOrderEntity => {
-      return existingJcdV3ProjectOrderEntity.orderIdx === jcdV3ProjectOrderBase.orderIdx;
-    });
-    if(foundProjectOrderWithOrderIdx !== undefined) {
-      throw new Error(`Duplicate orderIdx ${foundProjectOrderWithOrderIdx.orderIdx} when adding ${jcdV3ProjectOrderBase.projectKey}, JcdV3ProjectOrder entity '${foundProjectOrderWithOrderIdx.projectKey}' already exists with the same orderIdx`);
-    }
-    foundProjectOrderWithProjectKey = nextJcdV3ProjectOrders.find(existingJcdV3ProjectOrderEntity => {
-      return existingJcdV3ProjectOrderEntity.projectKey === jcdV3ProjectOrderBase.projectKey;
-    });
-    if(foundProjectOrderWithProjectKey !== undefined) {
-      throw new Error(`Duplicate projectKey '${foundProjectOrderWithProjectKey.projectKey}'`);
-    }
-
-    nextJcdV3ProjectOrders.push(jcdV3ProjectOrderBase);
-  });
-
-  // Deserialize plain objects for type safety
-  nextJcdV3ProjectOrders = nextJcdV3ProjectOrders.map(JcdV3ProjectOrder.deserialize);
-
-  projectOrderQuery = gcpDb.createQuery('JcdProjectOrderV3');
-  [ projectOrderDbEntities ] = await projectOrderQuery.run();
-  currJcdV3ProjectOrders = projectOrderDbEntities.map(JcdV3ProjectOrder.deserialize);
-
-  nextJcdV3ProjectOrders = nextJcdV3ProjectOrders
-    .filter(nextJcdV3ProjectOrder => {
-      let foundCurrJcdV3OrderIdx: number;
-      foundCurrJcdV3OrderIdx = currJcdV3ProjectOrders
-        .findIndex(currJcdV3ProjectOrder => {
-          return (
-            (currJcdV3ProjectOrder.projectKey === nextJcdV3ProjectOrder.projectKey)
-            && (currJcdV3ProjectOrder.orderIdx === nextJcdV3ProjectOrder.orderIdx)
-          );
-        });
-      return foundCurrJcdV3OrderIdx === -1;
-    });
-
-  transaction = gcpDb.transaction();
-
-  nextJcdV3ProjectOrders.forEach(jcdV3ProjectOrderEntity => {
-    let dbKey: Key, jcdV3ProjectOrderEntityData: JcdV3ProjectOrder;
-    dbKey = gcpDb.key([ 'JcdProjectOrderV3', jcdV3ProjectOrderEntity.projectKey ]);
-    jcdV3ProjectOrderEntityData = {
-      projectKey: jcdV3ProjectOrderEntity.projectKey,
-      orderIdx: jcdV3ProjectOrderEntity.orderIdx,
-    };
-    transaction.upsert({
-      key: dbKey,
-      data: jcdV3ProjectOrderEntityData,
-    });
-  });
-
-  try {
-    await transaction.commit();
-  } catch(e) {
-    await transaction.rollback();
-    throw e;
-  }
-
 }
 
 async function createJcdV3ProjectImages() {
