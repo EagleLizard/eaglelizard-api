@@ -12,7 +12,7 @@ import { JcdV3ImageProjectBase, JCD_V3_IMAGE_PROJECT_BASES } from './jcd-v3-imag
 import { JCD_V3_PROJECT_ENUM } from './jcd-v3-project-enum';
 // import { JCD_PROJECT_ENUM as JCD_V3_PROJECT_ENUM } from '../jcd-constants';
 
-const db = new Datastore;
+const gcpDb = new Datastore;
 
 (async () => {
   if(config.APP_ENV === 'dev') {
@@ -30,10 +30,11 @@ async function jcdV3DbMain() {
   console.log('Jcd V3 DB Create');
   console.log('createJcdV3Keys...');
   await createJcdV3Keys();
-  console.log('createJcdV3ProjectOrders...');
-  await createJcdV3ProjectOrders();
-  console.log('createJcdV3Images...');
-  await createJcdV3ProjectImages();
+  // console.log('createJcdV3ProjectOrders...');
+  // await createJcdV3ProjectOrders();
+  // console.log('createJcdV3Images...');
+  // await createJcdV3ProjectImages();
+
   // console.log(jcdV3ProjectKeys);
   // const bucketv3 = gcpStorage.bucket(config.JCD_V3_GCP_BUCKET);
   // const [ filesV3 ] = await bucketv3.getFiles();
@@ -45,19 +46,35 @@ async function jcdV3DbMain() {
 
 async function createJcdV3Keys() {
   let transaction: Transaction;
-  let jcdV3ProjectKeys: JcdV3ProjectKey[];
+  let projecKeysQuery: Query, projectKeyDbEntities: unknown[];
+  let currJcdV3ProjectKeys: JcdV3ProjectKey[], nextJcdV3ProjectKeys: JcdV3ProjectKey[];
 
-  jcdV3ProjectKeys = JCD_V3_PROJECT_LIST.map(jcdV3ProjectEnumKey => {
+  projecKeysQuery = gcpDb.createQuery('JcdProjectKeyV3');
+  [ projectKeyDbEntities ] = await projecKeysQuery.run();
+  currJcdV3ProjectKeys = projectKeyDbEntities.map(JcdV3ProjectKey.deserialize);
+  // console.log(currJcdV3ProjectKeys);
+  nextJcdV3ProjectKeys = JCD_V3_PROJECT_LIST.map(jcdV3ProjectEnumKey => {
     return new JcdV3ProjectKey(
       jcdV3ProjectEnumKey,
       true,
     );
   });
-  transaction = db.transaction();
 
-  jcdV3ProjectKeys.forEach(jcdV3ProjectKeyEntity => {
+  nextJcdV3ProjectKeys = nextJcdV3ProjectKeys
+    .filter(nextJcdV3ProjectKey => {
+      let foundCurrJcdV3ProjectKeyIdx: number;
+      foundCurrJcdV3ProjectKeyIdx = currJcdV3ProjectKeys
+        .findIndex(currJcdV3ProjectKey => {
+          return currJcdV3ProjectKey.projectKey === nextJcdV3ProjectKey.projectKey;
+        });
+      return foundCurrJcdV3ProjectKeyIdx === -1;
+    });
+
+  transaction = gcpDb.transaction();
+
+  nextJcdV3ProjectKeys.forEach(jcdV3ProjectKeyEntity => {
     let dbKey: Key;
-    dbKey  = db.key([ 'JcdProjectKeyV3', jcdV3ProjectKeyEntity.projectKey ]);
+    dbKey  = gcpDb.key([ 'JcdProjectKeyV3', jcdV3ProjectKeyEntity.projectKey ]);
     transaction.upsert({
       key: dbKey,
       data: {
@@ -102,14 +119,14 @@ async function createJcdV3ProjectOrders() {
     jcdV3ProjectOrderEntities.push(jcdV3ProjectOrderBase);
   });
 
-  transaction = db.transaction();
+  transaction = gcpDb.transaction();
 
   // Deserialize plain objects for type safety
   jcdV3ProjectOrderEntities = jcdV3ProjectOrderEntities.map(JcdV3ProjectOrder.deserialize);
 
   jcdV3ProjectOrderEntities.forEach(jcdV3ProjectOrderEntity => {
     let dbKey: Key, jcdV3ProjectOrderEntityData: JcdV3ProjectOrder;
-    dbKey = db.key([ 'JcdProjectOrderV3', jcdV3ProjectOrderEntity.projectKey ]);
+    dbKey = gcpDb.key([ 'JcdProjectOrderV3', jcdV3ProjectOrderEntity.projectKey ]);
     jcdV3ProjectOrderEntityData = {
       projectKey: jcdV3ProjectOrderEntity.projectKey,
       orderIdx: jcdV3ProjectOrderEntity.orderIdx,
@@ -203,11 +220,11 @@ async function createJcdV3ProjectImage(jcdV3ImageProjectBase: JcdV3ImageProjectB
     }
   });
 
-  transaction = db.transaction();
+  transaction = gcpDb.transaction();
 
   jcdV3Images.forEach(jcdV3Image => {
     let dbKey: Key;
-    dbKey = db.key([ 'JcdImageV3', jcdV3Image.id ]);
+    dbKey = gcpDb.key([ 'JcdImageV3', jcdV3Image.id ]);
     transaction.upsert({
       key: dbKey,
       data: {
