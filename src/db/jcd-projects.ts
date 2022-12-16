@@ -1,5 +1,5 @@
 
-import { JCD_PROJECT_ENUM } from './jcd-constants';
+import { JCD_PROJECT_ENUM } from './jcd-db-constants';
 
 interface MediaAndPressDetail {
   description?: string;

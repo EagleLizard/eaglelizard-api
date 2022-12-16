@@ -10,34 +10,23 @@ import { JCD_V3_DB_IMAGE_KIND, JCD_V3_DB_PROJECT_KEY_KIND, JCD_V3_DB_PROJECT_KIN
 import { JcdV3Project } from '../../../models/jcd-models-v3/jcd-v3-project';
 import { JcdV3Image } from '../../../models/jcd-models-v3/jcd-v3-image';
 import { JcdV3ProjectPreview } from '../../../models/jcd-models-v3/jcd-v3-project-preview';
-import { logger } from '../../logger';
 export class JcdV3Service {
 
   static async getJcdProjectPreviews(): Promise<JcdV3ProjectPreview[]> {
     let jcdProjectOrders: JcdV3ProjectOrder[];
-    let projectEntities: unknown[], jcdProjects: JcdV3Project[];
-    let titleImageEntities: unknown[], jcdTitleImages: JcdV3Image[];
-    let projectsQuery: Query, titleImageQuery: Query;
-
+    let jcdProjects: JcdV3Project[];
+    let jcdTitleImages: JcdV3Image[];
     let jcdProjectPreviews: JcdV3ProjectPreview[];
 
-    const startMs = Date.now();
-
-    jcdProjectOrders = await JcdV3Service.getJcdProjectOrders();
-
-    projectsQuery = GcpDbService.gcpDb.createQuery(JCD_V3_DB_PROJECT_KIND);
-    [ projectEntities ] = await projectsQuery.run();
-    jcdProjects = projectEntities.map(JcdV3Project.deserialize);
-
-    titleImageQuery = GcpDbService.gcpDb
-      .createQuery(JCD_V3_DB_IMAGE_KIND)
-      .filter('imageType', '=', 'TITLE')
-    ;
-    [ titleImageEntities ] = await titleImageQuery.run();
-    jcdTitleImages = titleImageEntities.map(JcdV3Image.deserialize);
-
-    const getProjectPreviewMs = Date.now() - startMs;
-    logger.info(`${getProjectPreviewMs} ms`);
+    [
+      jcdProjectOrders,
+      jcdProjects,
+      jcdTitleImages,
+    ] = await Promise.all([
+      JcdV3Service.getJcdProjectOrders(),
+      JcdV3Service.getJcdProjects(),
+      JcdV3Service.getJcdTitleImages(),
+    ]);
 
     jcdProjectPreviews = jcdProjectOrders.map(jcdProjectOrder => {
       let projectPreview: JcdV3ProjectPreview;
@@ -58,6 +47,27 @@ export class JcdV3Service {
       return projectPreview;
     });
     return jcdProjectPreviews;
+  }
+
+  static async getJcdTitleImages(): Promise<JcdV3Image[]> {
+    let titleImageQuery: Query, titleImageEntities: unknown[];
+    let jcdTitleImages: JcdV3Image[];
+    titleImageQuery = GcpDbService.gcpDb
+      .createQuery(JCD_V3_DB_IMAGE_KIND)
+      .filter('imageType', '=', 'TITLE')
+    ;
+    [ titleImageEntities ] = await titleImageQuery.run();
+    jcdTitleImages = titleImageEntities.map(JcdV3Image.deserialize);
+    return jcdTitleImages;
+  }
+
+  static async getJcdProjects(): Promise<JcdV3Project[]> {
+    let projectsQuery: Query, projectEntities: unknown[];
+    let jcdProjects: JcdV3Project[];
+    projectsQuery = GcpDbService.gcpDb.createQuery(JCD_V3_DB_PROJECT_KIND);
+    [ projectEntities ] = await projectsQuery.run();
+    jcdProjects = projectEntities.map(JcdV3Project.deserialize);
+    return jcdProjects;
   }
 
   static async getJcdProjectOrders(): Promise<JcdV3ProjectOrder[]> {

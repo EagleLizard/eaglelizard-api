@@ -6,7 +6,7 @@ import { Datastore, Entity, Key, Query, Transaction } from '@google-cloud/datast
 
 import { config } from '../config';
 import { _JcdProject, JcdProjects, JCD_PROJECT_ORDER } from './jcd-projects';
-import { JCD_PROJECT_ENUM } from './jcd-constants';
+import { JCD_PROJECT_ENUM } from './jcd-db-constants';
 import { isNumber, isString } from '../lib/modules/type-validation/validate-primitives';
 import {
   JcdProjectListItem,
