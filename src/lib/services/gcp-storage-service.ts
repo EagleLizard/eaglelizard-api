@@ -12,6 +12,7 @@ import { PassThrough, Readable } from 'stream';
 
 import { config } from '../../config';
 import { ImageStream } from '../../models/image-stream';
+import { JCD_BUCKET_MAP, JCD_VERSION_ENUM } from '../jcd-constants';
 
 let gcpStorage: Storage;
 
@@ -23,16 +24,18 @@ export interface GetGcpImageStreamOpts {
   imageKey: string;
   folderKey: string;
   cacheStream?: PassThrough;
+  jcdBucketVersion?: JCD_VERSION_ENUM,
 }
 
 export async function getGcpImageStream(opts: GetGcpImageStreamOpts): Promise<ImageStream> {
-  let jcdBucket: Bucket;
+  let jcdBucketKey: string, jcdBucket: Bucket;
   let imageStream: ImageStream, imageReadStream: Readable;
   let bucketFile: string, remoteFile: File, fileMetaResponse: GetFileMetadataResponse,
     fileMetadata: Metadata;
   let headers: Record<string, string>;
 
-  jcdBucket = gcpStorage.bucket(config.JCD_GCP_BUCKET);
+  jcdBucketKey = JCD_BUCKET_MAP[opts?.jcdBucketVersion ?? JCD_VERSION_ENUM.JCD_V2];
+  jcdBucket = gcpStorage.bucket(jcdBucketKey);
 
   if(opts.folderKey === undefined) {
     bucketFile = opts.imageKey;

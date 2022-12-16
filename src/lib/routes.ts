@@ -5,6 +5,7 @@ import { getHealthcheck } from './controllers/get-healthcheck';
 import { getBaseRoute } from './controllers/get-base-route';
 import { getImagesV0 } from './controllers/get-images-v0';
 import { getImagesV1 } from './controllers/get-images-v1';
+import { getImagesV2 } from './controllers/get-images-v2';
 import {
   getJcdProjectList,
   getJcdProjects,
@@ -19,8 +20,10 @@ export function registerRoutes(app: Express): Express {
 
   app.get('/health', getHealthcheck);
   app.get('/', getBaseRoute);
+
   app.get('/image/v0/:folder/:image?', getImagesV0);
   app.get('/image/v1/:folder/:image?', getImagesV1);
+  app.get('/image/v2/:folder/:image?', getImagesV2);
 
   app.get('/jcd/v0/project/list', getJcdProjectList);
   app.get('/jcd/v0/project', getJcdProjects);
