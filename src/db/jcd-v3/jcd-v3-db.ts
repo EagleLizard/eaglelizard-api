@@ -30,15 +30,19 @@ async function jcdV3DbMain() {
 
   console.log('Jcd V3 DB Create');
 
+  console.log('');
   console.log('createJcdV3Keys...');
   await createJcdV3Keys(gcpDb);
 
+  console.log('');
   console.log('createJcdV3ProjectOrders...');
   await createJcdV3ProjectOrders(gcpDb);
 
+  console.log('');
   console.log('createJcdV3Images...');
   await createJcdV3ProjectImages(gcpDb);
 
+  console.log('');
   console.log('createJcdV3Projects...');
   await createJcdV3Projects(gcpDb);
 

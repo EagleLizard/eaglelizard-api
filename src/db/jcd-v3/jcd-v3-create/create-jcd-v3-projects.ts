@@ -42,7 +42,12 @@ export async function createJcdV3Projects(gcpDb: Datastore) {
     return foundCurrJcdV3ProjectIdx === -1;
   });
 
-  // console.log(nextJcdV3Projects);
+  if(nextJcdV3Projects.length > 0) {
+    const nextJcdV3ProjectIds = nextJcdV3Projects.map(jcdV3Project => jcdV3Project.projectKey);
+    nextJcdV3ProjectIds.forEach(nextJcdV3ProjectId => {
+      console.log([ nextJcdV3ProjectId ]);
+    });
+  }
 
   transaction = gcpDb.transaction();
 

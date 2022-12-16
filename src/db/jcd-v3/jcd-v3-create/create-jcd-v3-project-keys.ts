@@ -32,6 +32,20 @@ export async function createJcdV3Keys(gcpDb: Datastore) {
       return foundCurrJcdV3ProjectKeyIdx === -1;
     });
 
+  if(nextJcdV3ProjectKeys.length > 0) {
+    const tupleHeaders: (keyof JcdV3ProjectKey)[] = [ 'projectKey', 'active' ];
+    const jcdProjectKeyTuples = nextJcdV3ProjectKeys.map(jcdProjectKey => {
+      return tupleHeaders.reduce((acc, curr) => {
+        acc.push(jcdProjectKey[curr]);
+        return acc;
+      }, []);
+    });
+    console.log(tupleHeaders.join(', '));
+    jcdProjectKeyTuples.forEach(jcdProjectKeyTuple => {
+      console.log(jcdProjectKeyTuple);
+    });
+  }
+
   transaction = gcpDb.transaction();
 
   nextJcdV3ProjectKeys.forEach(jcdV3ProjectKeyEntity => {

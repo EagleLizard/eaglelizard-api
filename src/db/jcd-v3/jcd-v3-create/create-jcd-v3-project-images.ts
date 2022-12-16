@@ -103,6 +103,21 @@ async function createJcdV3ProjectImage(gcpDb: Datastore, jcdV3ImageProjectBase: 
       return foundCurrJcdV3ImageIdx === -1;
     });
 
+  if(nextJcdV3Images.length > 0) {
+    const tupleHeaders: (keyof JcdV3Image)[] = [ 'id', 'orderIdx', 'active' ];
+    const nextJcdV3ImageTuples = nextJcdV3Images.map(jcdV3Image => {
+      return tupleHeaders.reduce((acc, curr) => {
+        acc.push(jcdV3Image[curr]);
+        return acc;
+      }, []);
+    });
+    console.log(jcdV3ProjectKeyId);
+    console.log(tupleHeaders.join(', '));
+    nextJcdV3ImageTuples.forEach(jcdImageTuple => {
+      console.log(jcdImageTuple);
+    });
+  }
+
   transaction = gcpDb.transaction();
 
   nextJcdV3Images.forEach(jcdV3Image => {

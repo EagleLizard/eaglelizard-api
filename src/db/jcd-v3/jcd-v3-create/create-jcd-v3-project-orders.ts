@@ -53,6 +53,20 @@ export async function createJcdV3ProjectOrders(gcpDb: Datastore) {
       return foundCurrJcdV3OrderIdx === -1;
     });
 
+  if(nextJcdV3ProjectOrders.length > 0) {
+    const tupleHeaders: (keyof JcdV3ProjectOrder)[] = [ 'projectKey', 'orderIdx' ];
+    const jcdProjectOrderTuples = nextJcdV3ProjectOrders.map(jcdProjectOrder => {
+      return tupleHeaders.reduce((acc, curr) => {
+        acc.push(jcdProjectOrder[curr]);
+        return acc;
+      }, []);
+    });
+    console.log(tupleHeaders.join(', '));
+    jcdProjectOrderTuples.forEach(jcdProjectOrderTuple => {
+      console.log(jcdProjectOrderTuple);
+    });
+  }
+
   transaction = gcpDb.transaction();
 
   nextJcdV3ProjectOrders.forEach(jcdV3ProjectOrderEntity => {
