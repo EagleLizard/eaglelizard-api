@@ -49,6 +49,20 @@ export class JcdV3Service {
     return jcdProjectPreviews;
   }
 
+  static async getJcdImagesByProject(projectKey: string): Promise<JcdV3Image[]> {
+    let imagesQuery: Query, imageEntities: unknown[];
+    let jcdImages: JcdV3Image[];
+    imagesQuery = GcpDbService.gcpDb
+      .createQuery(JCD_V3_DB_IMAGE_KIND)
+      .filter('projectKey', '=', projectKey)
+      .filter('active', true)
+    ;
+    console.log(projectKey);
+    [ imageEntities ] = await imagesQuery.run();
+    jcdImages = imageEntities.map(JcdV3Image.deserialize);
+    return jcdImages;
+  }
+
   static async getJcdTitleImages(): Promise<JcdV3Image[]> {
     let titleImageQuery: Query, titleImageEntities: unknown[];
     let jcdTitleImages: JcdV3Image[];
@@ -59,6 +73,18 @@ export class JcdV3Service {
     [ titleImageEntities ] = await titleImageQuery.run();
     jcdTitleImages = titleImageEntities.map(JcdV3Image.deserialize);
     return jcdTitleImages;
+  }
+
+  static async getJcdProjectByRoute(projectRoute: string): Promise<JcdV3Project> {
+    let projectsQuery: Query, projectEntities: unknown[];
+    let jcdProjects: JcdV3Project[];
+    projectsQuery = GcpDbService.gcpDb
+      .createQuery(JCD_V3_DB_PROJECT_KIND)
+      .filter('route', '=', projectRoute)
+    ;
+    [ projectEntities ] = await projectsQuery.run();
+    jcdProjects = projectEntities.map(JcdV3Project.deserialize);
+    return jcdProjects[0];
   }
 
   static async getJcdProjects(): Promise<JcdV3Project[]> {

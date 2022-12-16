@@ -33,7 +33,10 @@ export function imageTransform(imageTransformOpts: ImageTransformOpts): Readable
   if(height !== undefined) {
     resizeOpts.height = height;
   }
-  sharpTransformer = sharp().resize(resizeOpts);
+  sharpTransformer = sharp()
+    .rotate()
+    .resize(resizeOpts)
+  ;
 
   if(isJpeg(contentType)) {
     sharpTransformer.jpeg({

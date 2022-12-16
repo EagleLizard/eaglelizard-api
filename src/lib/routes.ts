@@ -13,6 +13,8 @@ import {
   getJcdProjectPage,
 } from './controllers/jcd-project/get-jcd-projects';
 import {
+  getJcdV3ImagesByProjectKey,
+  getJcdV3ProjectByRoute,
   getJcdV3Projects,
 } from './controllers/jcd-v3-ctrl/get-jcd-v3-projects';
 
@@ -31,6 +33,8 @@ export function registerRoutes(app: Express): Express {
   app.get('/jcd/v0/project/page/:projectKey', getJcdProjectPage);
 
   app.get('/jcd/v1/project', getJcdV3Projects);
+  app.get('/jcd/v1/project/:projectRoute', getJcdV3ProjectByRoute);
+  app.get('/jcd/v1/project/images/:projectKey', getJcdV3ImagesByProjectKey);
 
   return app;
 }
