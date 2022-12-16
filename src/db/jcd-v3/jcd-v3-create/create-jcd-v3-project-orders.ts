@@ -3,6 +3,7 @@ import { Datastore, Key, Query, Transaction } from '@google-cloud/datastore';
 
 import { JcdV3ProjectOrder } from '../../../models/jcd-models-v3/jcd-v3-project-order';
 import { JCD_V3_PROJECT_ORDER_BASES } from '../jcd-v3-project-list';
+import { JCD_V3_DB_PROJECT_ORDER_KIND } from '../../../lib/jcd-v3-constants';
 
 export async function createJcdV3ProjectOrders(gcpDb: Datastore) {
   let transaction: Transaction;
@@ -35,7 +36,7 @@ export async function createJcdV3ProjectOrders(gcpDb: Datastore) {
   // Deserialize plain objects for type safety
   nextJcdV3ProjectOrders = nextJcdV3ProjectOrders.map(JcdV3ProjectOrder.deserialize);
 
-  projectOrderQuery = gcpDb.createQuery('JcdProjectOrderV3');
+  projectOrderQuery = gcpDb.createQuery(JCD_V3_DB_PROJECT_ORDER_KIND);
   [ projectOrderDbEntities ] = await projectOrderQuery.run();
   currJcdV3ProjectOrders = projectOrderDbEntities.map(JcdV3ProjectOrder.deserialize);
 
@@ -56,7 +57,7 @@ export async function createJcdV3ProjectOrders(gcpDb: Datastore) {
 
   nextJcdV3ProjectOrders.forEach(jcdV3ProjectOrderEntity => {
     let dbKey: Key, jcdV3ProjectOrderEntityData: JcdV3ProjectOrder;
-    dbKey = gcpDb.key([ 'JcdProjectOrderV3', jcdV3ProjectOrderEntity.projectKey ]);
+    dbKey = gcpDb.key([ JCD_V3_DB_PROJECT_ORDER_KIND, jcdV3ProjectOrderEntity.projectKey ]);
     jcdV3ProjectOrderEntityData = {
       projectKey: jcdV3ProjectOrderEntity.projectKey,
       orderIdx: jcdV3ProjectOrderEntity.orderIdx,

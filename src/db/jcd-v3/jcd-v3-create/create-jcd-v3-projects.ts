@@ -1,7 +1,8 @@
 
-import { Datastore, Query, Transaction } from '@google-cloud/datastore';
+import { Datastore, Key, Query, Transaction } from '@google-cloud/datastore';
 import { JcdV3Project } from '../../../models/jcd-models-v3/jcd-v3-project';
 import { JCD_V3_PROJECT_BASES } from '../jcd-v3-projects-base';
+import { JCD_V3_DB_PROJECT_KEY_KIND, JCD_V3_DB_PROJECT_KIND } from '../../../lib/jcd-v3-constants';
 
 export async function createJcdV3Projects(gcpDb: Datastore) {
   let transaction: Transaction;
@@ -28,7 +29,7 @@ export async function createJcdV3Projects(gcpDb: Datastore) {
   */
   nextJcdV3Projects = nextJcdV3Projects.map(JcdV3Project.deserialize);
 
-  projectsQuery = gcpDb.createQuery('JcdProjectV3');
+  projectsQuery = gcpDb.createQuery(JCD_V3_DB_PROJECT_KIND);
   [ jcdV3ProjectEntities ] = await projectsQuery.run();
 
   currJcdV3Projects = jcdV3ProjectEntities.map(JcdV3Project.deserialize);
@@ -47,7 +48,7 @@ export async function createJcdV3Projects(gcpDb: Datastore) {
 
   nextJcdV3Projects.forEach(nextJcdV3Project => {
     let dbKey: Key, jcdV3ProjectEntityData: JcdV3Project;
-    dbKey = gcpDb.key([ 'JcdProjectV3', nextJcdV3Project.projectKey ]);
+    dbKey = gcpDb.key([ JCD_V3_DB_PROJECT_KIND, nextJcdV3Project.projectKey ]);
     jcdV3ProjectEntityData = {
       projectKey: nextJcdV3Project.projectKey,
       route: nextJcdV3Project.route,

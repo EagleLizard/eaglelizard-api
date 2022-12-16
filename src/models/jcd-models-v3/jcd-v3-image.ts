@@ -26,7 +26,7 @@ export class JcdV3Image {
   ) {}
 
   static deserialize(rawImg: unknown): JcdV3Image {
-    let jcdImageV3: Record<string, unknown>;
+    let jcdV3Image: Record<string, unknown>;
     let id: string,
       projectKey: string,
       bucketFile: string,
@@ -37,34 +37,34 @@ export class JcdV3Image {
     if(!isObject(rawImg)) {
       throw new JcdTypeError('object');
     }
-    jcdImageV3 = rawImg as Record<string, unknown>;
+    jcdV3Image = rawImg as Record<string, unknown>;
 
-    if(!isString(jcdImageV3.id)) {
+    if(!isString(jcdV3Image.id)) {
       throw new JcdTypeError('string');
     }
 
-    if(!isString(jcdImageV3.projectKey)) {
+    if(!isString(jcdV3Image.projectKey)) {
       throw new JcdTypeError('string');
     }
-    if(!isString(jcdImageV3.bucketFile)) {
+    if(!isString(jcdV3Image.bucketFile)) {
       throw new JcdTypeError('string');
     }
-    if(!isNumber(jcdImageV3.orderIdx)) {
+    if(!isNumber(jcdV3Image.orderIdx)) {
       throw new JcdTypeError('number');
     }
-    if(!isBoolean(jcdImageV3.active)) {
+    if(!isBoolean(jcdV3Image.active)) {
       throw new JcdTypeError('boolean');
     }
-    if(!isJcdV3ImageType(jcdImageV3.imageType)) {
+    if(!isJcdV3ImageType(jcdV3Image.imageType)) {
       throw new JcdTypeError('JcdV3ImageType');
     }
 
-    id = jcdImageV3.id;
-    projectKey = jcdImageV3.projectKey;
-    bucketFile = jcdImageV3.bucketFile;
-    orderIdx = jcdImageV3.orderIdx;
-    active = jcdImageV3.active;
-    imageType = jcdImageV3.imageType;
+    id = jcdV3Image.id;
+    projectKey = jcdV3Image.projectKey;
+    bucketFile = jcdV3Image.bucketFile;
+    orderIdx = jcdV3Image.orderIdx;
+    active = jcdV3Image.active;
+    imageType = jcdV3Image.imageType;
 
     return new JcdV3Image(
       id,

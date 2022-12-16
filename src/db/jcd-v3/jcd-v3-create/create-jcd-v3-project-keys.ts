@@ -1,5 +1,6 @@
 
 import { Datastore, Key, Query, Transaction } from '@google-cloud/datastore';
+import { JCD_V3_DB_PROJECT_KEY_KIND } from '../../../lib/jcd-v3-constants';
 
 import { JcdV3ProjectKey } from '../../../models/jcd-models-v3/jcd-v3-project-key';
 import { JCD_V3_PROJECT_LIST } from '../jcd-v3-project-list';
@@ -9,7 +10,7 @@ export async function createJcdV3Keys(gcpDb: Datastore) {
   let projecKeysQuery: Query, projectKeyDbEntities: unknown[];
   let currJcdV3ProjectKeys: JcdV3ProjectKey[], nextJcdV3ProjectKeys: JcdV3ProjectKey[];
 
-  projecKeysQuery = gcpDb.createQuery('JcdProjectKeyV3');
+  projecKeysQuery = gcpDb.createQuery(JCD_V3_DB_PROJECT_KEY_KIND);
   [ projectKeyDbEntities ] = await projecKeysQuery.run();
 
   currJcdV3ProjectKeys = projectKeyDbEntities.map(JcdV3ProjectKey.deserialize);
@@ -35,7 +36,7 @@ export async function createJcdV3Keys(gcpDb: Datastore) {
 
   nextJcdV3ProjectKeys.forEach(jcdV3ProjectKeyEntity => {
     let dbKey: Key;
-    dbKey  = gcpDb.key([ 'JcdProjectKeyV3', jcdV3ProjectKeyEntity.projectKey ]);
+    dbKey  = gcpDb.key([ JCD_V3_DB_PROJECT_KEY_KIND, jcdV3ProjectKeyEntity.projectKey ]);
     transaction.upsert({
       key: dbKey,
       data: {

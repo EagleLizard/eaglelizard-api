@@ -11,6 +11,9 @@ import {
   getJcdProject,
   getJcdProjectPage,
 } from './controllers/jcd-project/get-jcd-projects';
+import {
+  getJcdV3Projects,
+} from './controllers/jcd-v3-ctrl/get-jcd-v3-projects';
 
 export function registerRoutes(app: Express): Express {
 
@@ -23,6 +26,8 @@ export function registerRoutes(app: Express): Express {
   app.get('/jcd/v0/project', getJcdProjects);
   app.get('/jcd/v0/project/:projectRoute', getJcdProject);
   app.get('/jcd/v0/project/page/:projectKey', getJcdProjectPage);
+
+  app.get('/jcd/v1/project', getJcdV3Projects);
 
   return app;
 }

@@ -1,5 +1,6 @@
 
 import { Datastore, Key, Query, Transaction } from '@google-cloud/datastore';
+import { JCD_V3_DB_IMAGE_KIND } from '../../../lib/jcd-v3-constants';
 import { JcdV3Image } from '../../../models/jcd-models-v3/jcd-v3-image';
 
 import { JcdV3ImageProjectBase, JCD_V3_IMAGE_PROJECT_BASES } from '../jcd-v3-images-base';
@@ -80,7 +81,7 @@ async function createJcdV3ProjectImage(gcpDb: Datastore, jcdV3ImageProjectBase: 
   });
 
   imageQuery = gcpDb
-    .createQuery('JcdImageV3')
+    .createQuery(JCD_V3_DB_IMAGE_KIND)
     .filter('projectKey', '=', jcdV3ProjectKeyId)
   ;
   [ imageDbEntities ] = await imageQuery.run();
@@ -106,7 +107,7 @@ async function createJcdV3ProjectImage(gcpDb: Datastore, jcdV3ImageProjectBase: 
 
   nextJcdV3Images.forEach(jcdV3Image => {
     let dbKey: Key;
-    dbKey = gcpDb.key([ 'JcdImageV3', jcdV3Image.id ]);
+    dbKey = gcpDb.key([ JCD_V3_DB_IMAGE_KIND, jcdV3Image.id ]);
     transaction.upsert({
       key: dbKey,
       data: {
