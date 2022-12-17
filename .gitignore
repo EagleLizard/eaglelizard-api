@@ -6,3 +6,4 @@ package-lock.json
 dist
 logs
 gcp-private-key.json
+image_cache
