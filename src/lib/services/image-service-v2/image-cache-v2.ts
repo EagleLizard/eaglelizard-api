@@ -11,9 +11,14 @@ import {
 } from '../../modules/util/files';
 import { PassThrough, Readable } from 'stream';
 import { createReadStream, createWriteStream, WriteStream } from 'fs';
+import { config } from '../../../config';
+
+const DO_CACHE = config.APP_ENV === 'dev';
 
 (function initImageCacheV3() {
-  mkdirIfNotExistRecursiveSync(IMAGE_CACHE_DIR_PATH);
+  if(DO_CACHE) {
+    mkdirIfNotExistRecursiveSync(IMAGE_CACHE_DIR_PATH);
+  }
 })();
 
 const CACHE_KEY_DELIM = '_';
