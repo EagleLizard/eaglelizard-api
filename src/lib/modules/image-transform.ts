@@ -4,6 +4,8 @@ import { PassThrough, Readable } from 'stream';
 
 const JPEG_MIME_TYPE = 'image/jpeg';
 
+sharp.cache(false);
+
 export interface ImageTransformOpts {
   imageStream: Readable;
   contentType: string;
