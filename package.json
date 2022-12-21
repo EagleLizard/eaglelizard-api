@@ -4,7 +4,7 @@
   "description": "",
   "main": ".eslintrc.js",
   "scripts": {
-    "start": "node --optimize_for_size --max_old_space_size=460 index.js",
+    "start": "LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2 node --optimize_for_size --max_old_space_size=460 index.js",
     "build": "rm -rf ./dist && tsc",
     "dev": "nodemon -e ts,json,js --watch \"./dist/**/*\" --exec \"npm start\"",
     "db:create": "node dist/db/create-db.js",
