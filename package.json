@@ -8,6 +8,7 @@
     "build": "rm -rf ./dist && tsc",
     "dev": "nodemon -e ts,json,js --watch \"./dist/**/*\" --exec \"npm start\"",
     "db:create": "node dist/db/create-db.js",
+    "clear-image-cache": "rm ./image_cache/*",
     "lint": "eslint src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
