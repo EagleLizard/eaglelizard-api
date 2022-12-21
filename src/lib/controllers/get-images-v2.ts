@@ -54,8 +54,11 @@ export async function getImagesV2(req: Request, res: Response) {
   headers = gcpImageStream.headers;
   imageStream = gcpImageStream.stream;
 
+  const CACHE_CONTROL_MAX_AGE = 60 * 60 * 24;
+
   res.setHeader('content-type', headers['content-type']);
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('cache-control', `max-age=${CACHE_CONTROL_MAX_AGE}`);
+  // res.setHeader('Access-Control-Allow-Origin', '*');
 
   imageStream.on('error', err => {
     console.error(err);
