@@ -48,6 +48,8 @@ import { JcdV3ProjectKey } from '../../models/jcd-models-v3/jcd-v3-project-key';
   a-year-with-frog-and-toad
 */
 
+export const JCD_V3_ART_PROJECT_KEY = 'ART';
+
 export enum JCD_V3_PROJECT_ENUM {
 
   THE_TALES_OF_HOFFMANN = 'THE_TALES_OF_HOFFMANN',
