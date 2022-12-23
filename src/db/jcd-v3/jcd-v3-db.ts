@@ -11,6 +11,7 @@ import { createJcdV3Keys } from './jcd-v3-create/create-jcd-v3-project-keys';
 import { createJcdV3ProjectOrders } from './jcd-v3-create/create-jcd-v3-project-orders';
 import { createJcdV3ProjectImages } from './jcd-v3-create/create-jcd-v3-project-images';
 import { createJcdV3Projects } from './jcd-v3-create/create-jcd-v3-projects';
+import { creatJcdV3Art } from './jcd-v3-create/create-jcd-v3-art';
 
 (async () => {
   if(config.APP_ENV === 'dev') {
@@ -27,6 +28,7 @@ import { createJcdV3Projects } from './jcd-v3-create/create-jcd-v3-projects';
 async function jcdV3DbMain() {
 
   const gcpDb = new Datastore;
+  const gcpStorage = new Storage;
 
   console.log('Jcd V3 DB Create');
 
@@ -46,11 +48,20 @@ async function jcdV3DbMain() {
   console.log('createJcdV3Projects...');
   await createJcdV3Projects(gcpDb);
 
-  // console.log(jcdV3ProjectKeys);
+  console.log('');
+  console.log('createJcdV3Images art/ ...');
+  await creatJcdV3Art(gcpDb);
+
   // const bucketv3 = gcpStorage.bucket(config.JCD_V3_GCP_BUCKET);
   // const [ filesV3 ] = await bucketv3.getFiles();
   // console.log(filesV3.length);
-  // filesV3.forEach(file => {
-  //   console.log(file.name);
+  // const artFiles = filesV3.filter(file => {
+  //   return file.name.startsWith('art/');
   // });
+  // artFiles.forEach(file => {
+  //   if(file.name.startsWith('art/')) {
+  //     console.log(file.name);
+  //   }
+  // });
+  // console.log(`artFiles.length: ${artFiles.length}`);
 }

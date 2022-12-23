@@ -15,6 +15,7 @@ import { logger } from '../logger';
 import { config } from '../../config';
 
 const DO_CACHE = config.APP_ENV === 'dev';
+// const DO_CACHE = false;
 
 export async function getImageTransformStreamV2(opts: GetImageTransformStreamOpts): Promise<ImageStream> {
   let imageStream: ImageStream;

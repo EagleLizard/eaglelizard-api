@@ -9,6 +9,7 @@ import {
 import { ImageStream } from '../../models/image-stream';
 import { getImageTransformStreamV2 } from '../services/image-service-v2';
 import { logger } from '../logger';
+import { isNumber } from '../modules/type-validation/validate-primitives';
 
 export async function getImagesV2(req: Request, res: Response) {
   let imageKey: string, folderKey: string, widthParam: string, width: number,
@@ -46,6 +47,13 @@ export async function getImagesV2(req: Request, res: Response) {
       logger.error(`${e.code} - ${e.message}`);
       res.statusCode = e.response.statusCode;
       res.statusMessage = e.response.statusMessage;
+      return res.end();
+    } else if(e.code !== undefined) {
+      res.statusCode = (isNumber(e.code))
+        ? e.code
+        : 500
+      ;
+      res.statusMessage = e.message;
       return res.end();
     } else {
       throw e;
