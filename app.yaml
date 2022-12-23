@@ -1,6 +1,15 @@
 # [START app_yaml]
 runtime: nodejs16
 instance_class: F4
+automatic_scaling:
+  max_concurrent_requests: 50
+  target_throughput_utilization: 0.9
+  target_cpu_utilization: 0.85
+  max_instances: 4
+  min_idle_instances: automatic
+  max_idle_instances: 4
+  min_pending_latency: automatic
+  max_pending_latency: automatic
 env_variables:
   GCP_PROJECT_ID: "286428615502"
   aws_access_key_id: "AKIAUKSW7EP4G66JAYXE"
