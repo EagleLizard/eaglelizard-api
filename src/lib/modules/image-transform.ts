@@ -5,14 +5,15 @@ import { PassThrough, Readable } from 'stream';
 const JPEG_MIME_TYPE = 'image/jpeg';
 
 sharp.cache(false);
+sharp.concurrency(1);
 
-export interface ImageTransformOpts {
+export type ImageTransformOpts = {
   imageStream: Readable;
   contentType: string;
   width: number;
   height: number;
   cacheStream?: PassThrough;
-}
+};
 
 export function imageTransform(imageTransformOpts: ImageTransformOpts): Readable {
   let imageStream: Readable, contentType: string, width: number, height: number,
