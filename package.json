@@ -15,16 +15,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/datastore": "^6.6.2",
-    "@google-cloud/logging-winston": "^4.1.1",
-    "@google-cloud/secret-manager": "^3.10.1",
-    "@google-cloud/storage": "^5.16.1",
-    "aws-sdk": "^2.1046.0",
+    "@aws-sdk/client-s3": "^3.282.0",
+    "@google-cloud/datastore": "^8.5.0",
+    "@google-cloud/logging-winston": "^6.0.0",
+    "@google-cloud/secret-manager": "^5.1.0",
+    "@google-cloud/storage": "^7.7.0",
+    "aws-sdk": "^2.1570.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "lodash.isequal": "^4.5.0",
     "morgan": "^1.10.0",
-    "sharp": "^0.29.3",
+    "nodemon": "^3.1.0",
+    "sharp": "^0.33.2",
     "source-map-support": "^0.5.21",
     "winston": "^3.3.3"
   },
@@ -38,8 +40,7 @@
     "@types/source-map-support": "^0.5.4",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
-    "eslint": "^8.4.1",
-    "nodemon": "^2.0.15",
-    "typescript": "^4.5.4"
+    "eslint": "^8.57.0",
+    "typescript": "^5.3.3"
   }
 }

@@ -14,6 +14,49 @@ export type JcdV3ImageProjectBase = {
 
 export const JCD_V3_IMAGE_PROJECT_BASES: JcdV3ImageProjectBase[] = [
   {
+    projectKey: JCD_V3_PROJECT_ENUM.BALTHAZAR,
+    titleImgUri: 'balthazar/00-Balthazar.jpg',
+    galleryImgUris: [
+      'balthazar/01-Balthazar.jpg',
+      'balthazar/02-Balthazar.jpg',
+      'balthazar/03-Balthazar.jpg',
+      'balthazar/04-Balthazar.jpg',
+      'balthazar/05-Balthazar.jpg',
+      'balthazar/06-Balthazar.jpg',
+      'balthazar/07-Balthazar.jpg',
+      'balthazar/08-Balthazar.jpg',
+    ],
+  },
+  {
+    projectKey: JCD_V3_PROJECT_ENUM.THE_DIARY_OF_ANNE_FRANK,
+    titleImgUri: 'anne-frank/00-Anne-Frank.jpg',
+    galleryImgUris: [
+      'anne-frank/01-Anne-Frank.jpg',
+      'anne-frank/02-Anne-Frank.jpg',
+      'anne-frank/03-Anne-Frank.jpg',
+      'anne-frank/04-Anne-Frank.jpg',
+      'anne-frank/05-Anne-Frank.jpg',
+      'anne-frank/06-Anne-Frank.jpg',
+      'anne-frank/07-Anne-Frank.jpg',
+      'anne-frank/08-Anne-Frank.jpg',
+      'anne-frank/09-Anne-Frank.jpg',
+      'anne-frank/10-Anne-Frank.jpg',
+      'anne-frank/11-Anne-Frank.jpg',
+    ],
+  },
+  {
+    projectKey: JCD_V3_PROJECT_ENUM.GO_HOME_COME_BACK,
+    titleImgUri: 'go-home/00-Go-Home.jpg',
+    galleryImgUris: [
+      'go-home/01-Go-Home.jpg',
+      'go-home/02-Go-Home.jpg',
+      'go-home/03-Go-Home.jpg',
+      'go-home/04-Go-Home.jpg',
+      'go-home/05-Go-Home.jpg',
+      'go-home/06-Go-Home.jpg',
+    ],
+  },
+  {
     projectKey: JCD_V3_PROJECT_ENUM.THE_TALES_OF_HOFFMANN,
     titleImgUri: '1-hoffman/00-hoffmann-title.jpg',
     galleryImgUris: [

@@ -3,6 +3,10 @@ import { JcdV3ProjectOrder } from '../../models/jcd-models-v3/jcd-v3-project-ord
 import { JCD_V3_PROJECT_ENUM } from './jcd-v3-project-enum';
 
 export const JCD_V3_PROJECT_LIST: JCD_V3_PROJECT_ENUM[] = [
+  JCD_V3_PROJECT_ENUM.BALTHAZAR,
+  JCD_V3_PROJECT_ENUM.THE_DIARY_OF_ANNE_FRANK,
+  JCD_V3_PROJECT_ENUM.GO_HOME_COME_BACK,
+
   JCD_V3_PROJECT_ENUM.THE_TALES_OF_HOFFMANN,
   JCD_V3_PROJECT_ENUM.LARAMIE_PROJECT,
   JCD_V3_PROJECT_ENUM.MY_BROTHER_WAS_A_VAMPIRE,
@@ -35,55 +39,67 @@ export const JCD_V3_PROJECT_ORDER_BASES: JcdV3ProjectOrder[] = [
     orderIdx: 2,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.LA_BOHEME,
+    projectKey: JCD_V3_PROJECT_ENUM.BALTHAZAR,
     orderIdx: 3,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.URINETOWN,
+    projectKey: JCD_V3_PROJECT_ENUM.LA_BOHEME,
     orderIdx: 4,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.THE_TEMPEST,
+    projectKey: JCD_V3_PROJECT_ENUM.URINETOWN,
     orderIdx: 5,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.AFTERSHOCK,
+    projectKey: JCD_V3_PROJECT_ENUM.THE_TEMPEST,
     orderIdx: 6,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.SWEENEY_TODD,
+    projectKey: JCD_V3_PROJECT_ENUM.AFTERSHOCK,
     orderIdx: 7,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.O_DEAR_BLOSSOM,
+    projectKey: JCD_V3_PROJECT_ENUM.SWEENEY_TODD,
     orderIdx: 8,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.JAMES_AND_THE_GIANT_PEACH,
+    projectKey: JCD_V3_PROJECT_ENUM.O_DEAR_BLOSSOM,
     orderIdx: 9,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.THE_DRAG,
+    projectKey: JCD_V3_PROJECT_ENUM.JAMES_AND_THE_GIANT_PEACH,
     orderIdx: 10,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.AGAMEMNON,
+    projectKey: JCD_V3_PROJECT_ENUM.THE_DIARY_OF_ANNE_FRANK,
     orderIdx: 11,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.CINDERELLA_EATS_RICE_AND_BEANS,
+    projectKey: JCD_V3_PROJECT_ENUM.THE_DRAG,
     orderIdx: 12,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.THE_CLEAN_UP_PROJECT,
+    projectKey: JCD_V3_PROJECT_ENUM.AGAMEMNON,
     orderIdx: 13,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.NEXT_FALL,
+    projectKey: JCD_V3_PROJECT_ENUM.GO_HOME_COME_BACK,
     orderIdx: 14,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.TRIBES,
+    projectKey: JCD_V3_PROJECT_ENUM.CINDERELLA_EATS_RICE_AND_BEANS,
     orderIdx: 15,
+  },
+  {
+    projectKey: JCD_V3_PROJECT_ENUM.THE_CLEAN_UP_PROJECT,
+    orderIdx: 16,
+  },
+  {
+    projectKey: JCD_V3_PROJECT_ENUM.NEXT_FALL,
+    orderIdx: 17,
+  },
+  {
+    projectKey: JCD_V3_PROJECT_ENUM.TRIBES,
+    orderIdx: 18,
   },
 ];

@@ -4,6 +4,174 @@ import { JCD_V3_PROJECT_ENUM } from './jcd-v3-project-enum';
 
 export const JCD_V3_PROJECT_BASES: JcdV3Project[] = [
   {
+    projectKey: JCD_V3_PROJECT_ENUM.GO_HOME_COME_BACK,
+    route: 'go-home-come-back',
+    title: 'Go Home Come Back',
+    playwright: [
+      'World Premiere by Darryl Stamp',
+    ],
+    venue: 'Rose Wagner Performing Arts Center',
+    producer: 'Plan-B Theatre Company',
+    month: 2,
+    year: 2023,
+    description: [
+      'Creating the world of a playful, contemporary, and non-traditional limbo called for a set that enhanced the dreamlike, distorted, and bizarre adventure that is the moment caught between death and the afterlife. The design was inspired by the Surrealist movement to produce an eye-catching, vibrant, and trippy experience.',
+    ],
+    productionCredits: [
+      'Directed by Cheryl Ann Cluff',
+      'Scenic Design by Janice Chan',
+      'Props Design by Arika Schockmel',
+      'Lighting Design by Pilar I. Davis',
+      'Sound Design by Cheryl Ann Cluff',
+      'Costume Design by Derek Williamson',
+      'Scenic Construction by Grey Rung',
+      'Production Photography by Sharah Meservy',
+    ],
+    mediaAndPress: [
+      {
+        publication: '(QSaltlake Magazine)',
+        link: {
+          label: '‘Go Home Come Back’ is Heartfelt, Thought-Provoking, and Personal',
+          uri: 'https://www.qsaltlake.com/news/2023/01/18/go-home-come-back-is-heartfelt-thought-provoking-and-personal/',
+        }
+      },
+      {
+        publication: '(Gephardt Daily)',
+        link: {
+          label: 'Plan-B Theatre Continues its Season with a World Premiere about First Impressions, Second Chances',
+          uri: 'https://gephardtdaily.com/local/plan-b-theatre-continues-its-season-with-a-world-premiere-about-first-impressions-second-chances/',
+        }
+      },
+      {
+        publication: '(The Utah Review)',
+        link: {
+          label: 'Nourishing the Soul: Matchstick Girl by Jennifer Kokai and Kenneth Plain at Weber State Theatre, Go Home Come Back by Darryl Stamp at Plan-B Theatre',
+          uri: 'https://www.theutahreview.com/nourishing-the-soul-matchstick-girl-by-jennifer-kokai-and-kenneth-plain-at-weber-state-theatre-go-home-come-back-by-darryl-stamp-at-plan-b-theatre/',
+        }
+      },
+    ],
+  },
+  {
+    projectKey: JCD_V3_PROJECT_ENUM.THE_DIARY_OF_ANNE_FRANK,
+    route: 'the-diary-of-anne-frank',
+    title: 'The Diary of Anne Frank',
+    playwright: [
+      'Written by Albert Hackett & Frances Goodrich',
+    ],
+    venue: 'Bastian Theatre',
+    producer: 'The Noorda Center for the Performing Arts',
+    month: 10,
+    year: 2023,
+    description: [
+      'Grounded in historical authenticity, the design approach considered Anne Frank’s worldview, which was one of colour, and vibrancy, yet steeped in fear at this moment in her life. The scenic design was a visual representation of her diary entries, highlighting every conflict, hope, fear, and dream. Every design detail was inspired by the Secret Annex.',
+    ],
+    productionCredits: [
+      'Directed by John Newman',
+      'Technical Direction by Eric Kiekhaefer',
+      'Scenic Design by Janice Chan',
+      'Props Design by Maisie Bunker Nelson',
+      'Lighting Design by David McKain',
+      'Costume Design by Kaely Hope',
+      'Production Photography by Beau Pearson',
+    ],
+    mediaAndPress: [
+      {
+        publication: '(UVU Review)',
+        description: 'This play amazingly did what every artist strives to do: it left a lasting impact.',
+        link: {
+          label: '“The Diary of Anne Frank:” A Story of Joy and Pain',
+          uri: 'https://www.uvureview.com/valley-life/the-diary-of-anne-frank-a-story-of-joy-and-pain/',
+        }
+      }
+    ],
+  },
+  {
+    projectKey: JCD_V3_PROJECT_ENUM.BALTHAZAR,
+    route: 'balthazar',
+    title: 'Balthazar',
+    playwright: [
+      'World Premiere by Debora Threedy',
+    ],
+    venue: 'Rose Wagner Performing Arts Center',
+    producer: 'Plan-B Theatre Company',
+    month: 2,
+    year: 2024,
+    description: [
+      'Set in the Late Renaissance Venetian study of a respected lawyer, the compact black box stage design aimed to provide a backdrop that mirrored the themes of the piece: social values and expectations, gender roles, and the desire to change the rules of the game.',
+    ],
+    productionCredits: [
+      'Directed by Cheryl Ann Cluff',
+      'Scenic Design by Janice Chan',
+      'Props Design by Arika Schockmel',
+      'Lighting Design by Marley Keith',
+      'Sound Design by Cheryl Ann Cluff',
+      'Costume Design by Aaron Asano Swenson',
+      'Scenic Construction by David Knoell',
+      'Production Photography by Sharah Meservy',
+    ],
+    mediaAndPress: [
+      {
+        publication: '(Front Row Reviewers)',
+        description: 'The scenic design by Janice Chan is a showstopper, evoking the artistic opulence of Venetian style with floating works of art and red drapes creating a backdrop for the scene.',
+        link: {
+          label: 'Plan-B Theatre’s Balthazar in Salt Lake City, Utah: A Heartwarming Study of Love and Drag',
+          uri: 'https://frontrowreviewers.com/?p=22422',
+        },
+      },
+      {
+        publication: '(The Utah Review)',
+        description: 'The outstanding sensory effects of Janice Chan’s Venetian set design and Cluff’s selection of music to convey the Elizabethan Age in its finest humanistic splendor.',
+        link: {
+          label: ' Plan-B Theatre’s World Premiere of Debora Threedy’s Balthazar is a Crown Jewel of Intimate Chamber Theater',
+          uri: 'https://www.theutahreview.com/plan-b-theatres-world-premiere-of-debora-threedys-balthazar-is-a-crown-jewel-of-intimate-chamber-theater/',
+        },
+      },
+      {
+        publication: '(Gephardt Daily)',
+        description: 'The production values too are exciting and innovative.',
+        link: {
+          label: ' Review: Plan-B’s world premiere ‘Balthazar’ presents a timely riff on Shakespeare’s ‘Merchant of Venice’',
+          uri: 'https://gephardtdaily.com/local/review-plan-bs-world-premiere-balthazar-presents-a-timely-riff-on-shakespeares-merchant-of-venice/',
+        },
+      },
+      {
+        publication: '(Independent Review Crew)',
+        link: {
+          label: 'Plan‑B Brings Shakespearean Gender Fluidity To The Stage',
+          uri: 'https://reviews.newhavenindependent.org/reviews/plan_b_brings_shakespearean_gender_fluidity_to_the_stage',
+        },
+      },
+      {
+        publication: '(Rhetorical Review)',
+        link: {
+          label: 'Reshaping Shakespeare for the Better: The World Premiere of Balthazar by Debora Threedy',
+          uri: 'https://rhetoricalreview.com/2024/02/15/reshaping-shakespeare-for-the-better-the-world-premiere-of-balthazar-by-debora-threedy/',
+        },
+      },
+      {
+        publication: '(15 Bytes)',
+        link: {
+          label: 'Debora Threedy’s “Balthazar” is a Lively and Fun Piece of Shakespearean Fan Fiction',
+          uri: 'https://artistsofutah.org/15Bytes/index.php/debora-threedys-balthazar-is-a-lively-and-fun-piece-of-shakespearean-fan-fiction/',
+        },
+      },
+      {
+        publication: '(Salt Lake Magazine)',
+        link: {
+          label: 'Review: Balthazar at Plan-B Theatre',
+          uri: 'https://www.saltlakemagazine.com/balthazar-plan-b-theatre/',
+        },
+      },
+      {
+        publication: '(SLUG Mag)',
+        link: {
+          label: 'Queer Shakespeare: Plan-B Theatre’s Balthazar Reads Between the Scenes',
+          uri: 'https://www.slugmag.com/arts/art/interviews-features/queer-shakespeare-plan-b-theatres-balthazar-reads-between-the-scenes/',
+        },
+      },
+    ],
+  },
+  {
     projectKey: JCD_V3_PROJECT_ENUM.THE_TALES_OF_HOFFMANN,
     route: 'the-tales-of-hoffmann',
     title: 'Les contes d’Hoffmann',

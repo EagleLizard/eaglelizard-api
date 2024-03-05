@@ -51,7 +51,16 @@ import { JcdV3ProjectKey } from '../../models/jcd-models-v3/jcd-v3-project-key';
 export const JCD_V3_ART_PROJECT_KEY = 'ART';
 
 export enum JCD_V3_PROJECT_ENUM {
+  /*
+    Mar 2024
+  */
+  BALTHAZAR = 'BALTHAZAR',
+  THE_DIARY_OF_ANNE_FRANK = 'THE_DIARY_OF_ANNE_FRANK',
+  GO_HOME_COME_BACK = 'GO_HOME_COME_BACK',
 
+  /*
+    Dec 2022
+  */
   THE_TALES_OF_HOFFMANN = 'THE_TALES_OF_HOFFMANN',
   LARAMIE_PROJECT = 'LARAMIE_PROJECT',
   MY_BROTHER_WAS_A_VAMPIRE = 'MY_BROTHER_WAS_A_VAMPIRE',
