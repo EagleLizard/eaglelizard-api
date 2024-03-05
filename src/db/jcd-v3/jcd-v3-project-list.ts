@@ -43,31 +43,31 @@ export const JCD_V3_PROJECT_ORDER_BASES: JcdV3ProjectOrder[] = [
     orderIdx: 3,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.LA_BOHEME,
+    projectKey: JCD_V3_PROJECT_ENUM.URINETOWN,
     orderIdx: 4,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.URINETOWN,
+    projectKey: JCD_V3_PROJECT_ENUM.LA_BOHEME,
     orderIdx: 5,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.THE_TEMPEST,
+    projectKey: JCD_V3_PROJECT_ENUM.AFTERSHOCK,
     orderIdx: 6,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.AFTERSHOCK,
+    projectKey: JCD_V3_PROJECT_ENUM.SWEENEY_TODD,
     orderIdx: 7,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.SWEENEY_TODD,
+    projectKey: JCD_V3_PROJECT_ENUM.THE_TEMPEST,
     orderIdx: 8,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.O_DEAR_BLOSSOM,
+    projectKey: JCD_V3_PROJECT_ENUM.JAMES_AND_THE_GIANT_PEACH,
     orderIdx: 9,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.JAMES_AND_THE_GIANT_PEACH,
+    projectKey: JCD_V3_PROJECT_ENUM.O_DEAR_BLOSSOM,
     orderIdx: 10,
   },
   {
@@ -75,23 +75,23 @@ export const JCD_V3_PROJECT_ORDER_BASES: JcdV3ProjectOrder[] = [
     orderIdx: 11,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.THE_DRAG,
+    projectKey: JCD_V3_PROJECT_ENUM.THE_CLEAN_UP_PROJECT,
     orderIdx: 12,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.AGAMEMNON,
+    projectKey: JCD_V3_PROJECT_ENUM.THE_DRAG,
     orderIdx: 13,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.GO_HOME_COME_BACK,
+    projectKey: JCD_V3_PROJECT_ENUM.AGAMEMNON,
     orderIdx: 14,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.CINDERELLA_EATS_RICE_AND_BEANS,
+    projectKey: JCD_V3_PROJECT_ENUM.GO_HOME_COME_BACK,
     orderIdx: 15,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.THE_CLEAN_UP_PROJECT,
+    projectKey: JCD_V3_PROJECT_ENUM.TRIBES,
     orderIdx: 16,
   },
   {
@@ -99,7 +99,7 @@ export const JCD_V3_PROJECT_ORDER_BASES: JcdV3ProjectOrder[] = [
     orderIdx: 17,
   },
   {
-    projectKey: JCD_V3_PROJECT_ENUM.TRIBES,
+    projectKey: JCD_V3_PROJECT_ENUM.CINDERELLA_EATS_RICE_AND_BEANS,
     orderIdx: 18,
   },
 ];

@@ -2,6 +2,7 @@
 import { PassThrough, Readable } from 'stream';
 
 import * as AWS from 'aws-sdk';
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 import {
   getS3Secret,
@@ -63,3 +64,32 @@ async function getAwsS3(): Promise<AWS.S3> {
   return s3;
 }
 
+export async function getS3ImageStreamV3(opts: GetS3ImageStreamOpts) {
+  let s3Client: S3Client;
+  let getObjectCommand: GetObjectCommand;
+  let imageKey: string, folderKey: string;
+  ({
+    imageKey,
+    folderKey,
+  } = opts);
+  s3Client = await getAwsS3ClientV3();
+  getObjectCommand = new GetObjectCommand({
+    Bucket: 'elasticbeanstalk-us-west-1-297608881144' + folderKey,
+    Key: imageKey,
+  });
+  const s3Request = s3Client.send(getObjectCommand);
+
+}
+
+async function getAwsS3ClientV3(): Promise<S3Client> {
+  let awsS3Secret: AwsS3Secret, s3Client: S3Client;
+  awsS3Secret = await getS3Secret();
+  s3Client = new S3Client({
+    region: 'us-west-1',
+    credentials: {
+      accessKeyId: awsS3Secret.id,
+      secretAccessKey: awsS3Secret.secret,
+    },
+  });
+  return s3Client;
+}

@@ -73,4 +73,17 @@ export async function getImagesV2(req: Request, res: Response) {
   });
 
   imageStream.pipe(res);
+  // await sleepStream(imageStream, 500);
+}
+
+async function sleepStream(rs: Readable, ms = 150) {
+  let delayMs: number;
+  rs.pause();
+  delayMs = Math.round(ms - (ms * Math.random()));
+  await new Promise<void>((resolve) => {
+    setTimeout(() => {
+      rs.resume();
+      resolve();
+    }, delayMs);
+  });
 }
