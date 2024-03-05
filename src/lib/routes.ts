@@ -17,11 +17,13 @@ import {
   getJcdV3ProjectByRoute,
   getJcdV3Projects,
 } from './controllers/jcd-v3-ctrl/get-jcd-v3-projects';
+import { getRobotsTxt } from './controllers/get-robots.txt';
 
 export function registerRoutes(app: Express): Express {
 
   app.get('/health', getHealthcheck);
   app.get('/', getBaseRoute);
+  app.get('/robots.txt', getRobotsTxt);
 
   app.get('/image/v0/:folder/:image?', getImagesV0);
   app.get('/image/v1/:folder/:image?', getImagesV1);

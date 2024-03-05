@@ -54,6 +54,7 @@ export const JCD_V3_IMAGE_PROJECT_BASES: JcdV3ImageProjectBase[] = [
       'go-home/04-Go-Home.jpg',
       'go-home/05-Go-Home.jpg',
       'go-home/06-Go-Home.jpg',
+      'go-home/07-Go-Home.jpg',
     ],
   },
   {
