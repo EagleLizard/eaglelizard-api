@@ -34,7 +34,7 @@ export const config = {
   APP_ENV,
   JCD_GCP_BUCKET,
   JCD_V3_GCP_BUCKET,
-};
+} as const;
 
 function init() {
   let isEnvPortStrValid: boolean, isEnvPortValid: boolean;

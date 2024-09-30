@@ -1,17 +1,16 @@
 
 import { PassThrough, Readable } from 'stream';
 
-import * as AWS from 'aws-sdk';
-import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand, S3Client, GetObjectCommandOutput } from '@aws-sdk/client-s3';
 
 import {
   getS3Secret,
   AwsS3Secret,
 } from './gcp-auth-service';
-import { awsSdkLogStream } from '../logger';
+import { awsSdkLogStream, awsSdkLogger } from '../logger';
 import { ImageStream } from '../../models/image-stream';
 
-AWS.config.logger = awsSdkLogStream;
+// AWS.config.logger = awsSdkLogStream;
 
 export interface GetS3ImageStreamOpts {
   imageKey: string;
@@ -20,9 +19,13 @@ export interface GetS3ImageStreamOpts {
 }
 
 export async function getS3ImageStream(opts: GetS3ImageStreamOpts): Promise<ImageStream> {
-  let s3: AWS.S3, s3Request: AWS.Request<AWS.S3.GetObjectOutput, AWS.AWSError>;
+  let s3: S3Client;
+  // let s3Request: S3Client.Request<AWS.S3.GetObjectOutput, AWS.AWSError>;
+  let s3Request: GetObjectCommandOutput;
   let s3ImageStream: ImageStream;
   let imageKey: string, folderKey: string, cacheStream: PassThrough;
+  let headers: Record<string, string>;
+  let s3Stream: Readable;
   ({
     imageKey,
     folderKey,
@@ -30,66 +33,41 @@ export async function getS3ImageStream(opts: GetS3ImageStreamOpts): Promise<Imag
   } = opts);
 
   s3 = await getAwsS3();
-  return new Promise((resolve, reject) => {
-    let s3Stream: Readable;
-    console.log(`${folderKey}/${imageKey}`);
-    s3Request = s3.getObject({
-      Bucket: 'elasticbeanstalk-us-west-1-297608881144' + folderKey,
-      Key: imageKey
-    });
-
-    s3Request.on('httpHeaders', (status, headers) => {
-      s3ImageStream = {
-        headers,
-        stream: s3Stream,
-      };
-      resolve(s3ImageStream);
-    });
-
-    s3Stream = s3Request.createReadStream();
-    if(cacheStream !== undefined) {
-      s3Stream.pipe(cacheStream);
-    }
-  });
-}
-
-async function getAwsS3(): Promise<AWS.S3> {
-  let awsS3Secret: AwsS3Secret, s3: AWS.S3;
-  awsS3Secret = await getS3Secret();
-  s3 = new AWS.S3({
-    region: 'us-west-1',
-    accessKeyId: awsS3Secret.id,
-    secretAccessKey: awsS3Secret.secret,
-  });
-  return s3;
-}
-
-export async function getS3ImageStreamV3(opts: GetS3ImageStreamOpts) {
-  let s3Client: S3Client;
-  let getObjectCommand: GetObjectCommand;
-  let imageKey: string, folderKey: string;
-  ({
-    imageKey,
-    folderKey,
-  } = opts);
-  s3Client = await getAwsS3ClientV3();
-  getObjectCommand = new GetObjectCommand({
+  s3Request = await s3.send(new GetObjectCommand({
     Bucket: 'elasticbeanstalk-us-west-1-297608881144' + folderKey,
     Key: imageKey,
-  });
-  const s3Request = s3Client.send(getObjectCommand);
-
+  }));
+  headers = {};
+  if(s3Request.ContentType !== undefined) {
+    headers['content-type'] = s3Request.ContentType;
+  }
+  if(s3Request.ContentLength !== undefined) {
+    headers['content-length'] = `${s3Request.ContentLength}`;
+  }
+  s3Stream = s3Request.Body as Readable;
+  if(cacheStream !== undefined) {
+    s3Stream.pipe(cacheStream);
+  }
+  s3ImageStream = {
+    headers,
+    stream: s3Stream,
+  };
+  return s3ImageStream;
 }
 
-async function getAwsS3ClientV3(): Promise<S3Client> {
-  let awsS3Secret: AwsS3Secret, s3Client: S3Client;
+async function getAwsS3(): Promise<S3Client> {
+  delete process.env.AWS_SECRET_ACCESS_KEY;
+  let awsS3Secret: AwsS3Secret
+  let s3: S3Client;
   awsS3Secret = await getS3Secret();
-  s3Client = new S3Client({
+  s3 = new S3Client({
     region: 'us-west-1',
+    // logger: awsSdkLogStream,
+    logger: awsSdkLogger,
     credentials: {
       accessKeyId: awsS3Secret.id,
       secretAccessKey: awsS3Secret.secret,
     },
   });
-  return s3Client;
+  return s3;
 }
