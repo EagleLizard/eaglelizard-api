@@ -12,6 +12,11 @@ import { MemCache } from '../modules/mem-cache/mem-cache';
 import { CacheFile } from '../modules/mem-cache/cache-file';
 import { GetImageTransformStreamOpts } from '../../models/image-stream';
 
+import { config } from '../../config';
+
+// const DO_CACHE = config.APP_ENV === 'dev';
+const DO_CACHE = false;
+
 export const MEM_CACHE = new MemCache;
 
 export async function getImageTransformStream(opts: GetImageTransformStreamOpts): Promise<ImageStream> {
@@ -22,6 +27,7 @@ export async function getImageTransformStream(opts: GetImageTransformStreamOpts)
     width,
     height,
   } = opts;
+  // console.log('image v0');
 
   if(
     (width !== undefined)
@@ -62,68 +68,24 @@ async function getResizeImageStream(opts: GetImageTransformStreamOpts): Promise<
   };
 }
 
-/*
-  Probably will deprecate any thumbnail caching,
-    it is not very effective and takes up space.
-*/
-async function getResizeImageStreamCached(opts: GetImageTransformStreamOpts): Promise<ImageStream> {
-  let imageStream: ImageStream;
-  let cacheImageStream: ImageStream, contentStream: Readable, headers: Record<string, string>;
-  let cacheStream: PassThrough, imageDataChunks: string[], imageData: string;
-  let hasInCache: boolean;
-  const {
-    imageKey,
-    folderKey,
-    width,
-    height,
-  } = opts;
-
-  hasInCache = MEM_CACHE.has(imageKey, folderKey, width, height);
-
-  if(hasInCache) {
-    cacheImageStream = getCacheStream(imageKey, folderKey, width, height);
-    contentStream = cacheImageStream.stream;
-    headers = cacheImageStream.headers;
-  } else {
-    imageStream = await getImageStream(imageKey, folderKey);
-    headers = imageStream.headers;
-
-    cacheStream = new PassThrough;
-    cacheStream.setEncoding('binary');
-    imageDataChunks = [];
-
-    cacheStream.on('data', (chunk) => {
-      imageDataChunks.push(chunk);
-    });
-    cacheStream.on('end', () => {
-      imageData = imageDataChunks.join('');
-      MEM_CACHE.set(imageData, headers['content-type'], imageKey, folderKey, width, height);
-    });
-
-    contentStream = imageTransform({
-      imageStream: imageStream.stream,
-      contentType: headers['content-type'],
-      width,
-      height,
-      cacheStream,
-    });
-  }
-  return {
-    stream: contentStream,
-    headers,
-  };
-}
-
 async function getImageStream(imageKey: string, folderKey: string, width?: number): Promise<ImageStream> {
   let hasInCache: boolean, imageStream: ImageStream;
 
   hasInCache = MEM_CACHE.has(imageKey, folderKey, width);
   console.log(`hasInCache ${MemCache.getKey(imageKey, folderKey, width)}: ${hasInCache}`);
 
-  if(hasInCache) {
-    imageStream = getCacheStream(imageKey, folderKey, width);
+  if(DO_CACHE) {
+    if(hasInCache) {
+      imageStream = getCacheStream(imageKey, folderKey, width);
+    } else {
+      imageStream = await getS3ImageStreamAndCache(imageKey, folderKey, width);
+    }
   } else {
-    imageStream = await getS3ImageStreamAndCache(imageKey, folderKey, width);
+    console.log('no cache');
+    imageStream = await getS3ImageStream({
+      imageKey,
+      folderKey,
+    });
   }
 
   return imageStream;

@@ -3,6 +3,7 @@ import winston, { createLogger, format, transport, transports } from 'winston';
 import { LoggingWinston } from '@google-cloud/logging-winston';
 
 import { config, isDevEnv } from '../config';
+import { ClientDefaults } from '@aws-sdk/client-s3';
 
 const levels = {
   error: 0,
@@ -57,6 +58,25 @@ export const awsSdkLogStream = {
   write: (msg: string) => {
     logger.info(msg);
   }
+};
+
+export const awsSdkLogger: ClientDefaults['logger'] = {
+  info: (...content: any[]) => {
+    console.log('info');
+    console.log(content);
+  },
+  debug: (...content: any[]) => {
+    console.log('debug');
+    console.log(content);
+  },
+  warn: (...content: any[]) => {
+    console.log('warn');
+    console.log(content);
+  },
+  error: (...content: any[]) => {
+    console.log('error');
+    console.log(content);
+  },
 };
 
 function getFileTransport(): transport {

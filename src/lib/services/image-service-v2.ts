@@ -13,6 +13,7 @@ import {
 } from './gcp-storage-service';
 import { logger } from '../logger';
 import { config } from '../../config';
+import { ImageServiceDev } from './image-service-dev';
 
 const DO_CACHE = config.APP_ENV === 'dev';
 // const DO_CACHE = false;
@@ -35,6 +36,10 @@ async function getImageStreamFromSource(opts: GetImageTransformStreamOpts): Prom
   } = opts;
 
   if(DO_CACHE) {
+    // gcpImageStream = await getImageStreamDev({
+    //   folderKey,
+    //   imageKey,
+    // });
     gcpImageStream = await getGcpImageStreamCached({
       folderKey,
       imageKey,
@@ -58,6 +63,10 @@ async function getImageStreamFromSource(opts: GetImageTransformStreamOpts): Prom
     stream: transformStream,
   };
   return imageStream;
+}
+
+function getImageStreamDev(opts: GetGcpImageStreamOpts): Promise<ImageStream> {
+  return ImageServiceDev.getImageStream(opts);
 }
 
 async function getGcpImageStreamCached(opts: GetGcpImageStreamOpts): Promise<ImageStream> {
