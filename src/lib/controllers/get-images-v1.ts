@@ -1,7 +1,7 @@
 
 import { Readable } from 'stream';
 
-import { Request, Response } from 'express';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   ApiError,
 } from '@google-cloud/common';
@@ -10,7 +10,19 @@ import { ImageStream } from '../../models/image-stream';
 import { getImageTransformStreamV1 } from '../services/image-service-v1';
 import { logger } from '../logger';
 
-export async function getImagesV1(req: Request, res: Response) {
+export async function getImagesV1(
+  req: FastifyRequest<{
+    Params: {
+      image?: string;
+      folder?: string;
+    },
+    Querystring: {
+      width?: string;
+      height?: string;
+    }
+  }>,
+  res: FastifyReply
+) {
   let imageKey: string, folderKey: string, widthParam: string, width: number,
     heightParam: string, height: number;
   let gcpImageStream: ImageStream,
@@ -45,8 +57,7 @@ export async function getImagesV1(req: Request, res: Response) {
     if(e instanceof ApiError) {
       logger.error(`${e.code} - ${e.message}`);
       res.statusCode = e.response.statusCode;
-      res.statusMessage = e.response.statusMessage;
-      return res.end();
+      return res.send(e.response.statusMessage);
     } else {
       throw e;
     }
@@ -54,12 +65,12 @@ export async function getImagesV1(req: Request, res: Response) {
   headers = gcpImageStream.headers;
   imageStream = gcpImageStream.stream;
 
-  res.setHeader('content-type', headers['content-type']);
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.header('content-type', headers['content-type']);
+  res.header('Access-Control-Allow-Origin', '*');
 
   imageStream.on('error', err => {
     console.error(err);
   });
 
-  imageStream.pipe(res);
+  return res.send(imageStream);
 }

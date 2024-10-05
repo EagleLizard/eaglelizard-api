@@ -36,15 +36,15 @@ async function getImageStreamFromSource(opts: GetImageTransformStreamOpts): Prom
   } = opts;
 
   if(DO_CACHE) {
-    // gcpImageStream = await getImageStreamDev({
-    //   folderKey,
-    //   imageKey,
-    // });
-    gcpImageStream = await getGcpImageStreamCached({
+    gcpImageStream = await getImageStreamDev({
       folderKey,
       imageKey,
-      jcdBucketVersion: JCD_VERSION_ENUM.JCD_V3,
     });
+    // gcpImageStream = await getGcpImageStreamCached({
+    //   folderKey,
+    //   imageKey,
+    //   jcdBucketVersion: JCD_VERSION_ENUM.JCD_V3,
+    // });
   } else {
     gcpImageStream = await getGcpImageStream({
       imageKey,
@@ -66,7 +66,10 @@ async function getImageStreamFromSource(opts: GetImageTransformStreamOpts): Prom
 }
 
 function getImageStreamDev(opts: GetGcpImageStreamOpts): Promise<ImageStream> {
-  return ImageServiceDev.getImageStream(opts);
+  return ImageServiceDev.getImageStream({
+    ...opts,
+    versionFolder: 'img-v3',
+  });
 }
 
 async function getGcpImageStreamCached(opts: GetGcpImageStreamOpts): Promise<ImageStream> {

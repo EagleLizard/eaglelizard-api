@@ -1,5 +1,5 @@
 
-import { Express } from 'express';
+import { FastifyInstance } from 'fastify';
 
 import { getHealthcheck } from './controllers/get-healthcheck';
 import { getBaseRoute } from './controllers/get-base-route';
@@ -19,7 +19,7 @@ import {
 } from './controllers/jcd-v3-ctrl/get-jcd-v3-projects';
 import { getRobotsTxt } from './controllers/get-robots.txt';
 
-export function registerRoutes(app: Express): Express {
+export function registerRoutes(app: FastifyInstance): FastifyInstance {
 
   app.get('/health', getHealthcheck);
   app.get('/', getBaseRoute);

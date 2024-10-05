@@ -1,18 +1,18 @@
 
-import express, { Express } from 'express';
-// import morgan from 'morgan';
+import Fastify, { FastifyInstance } from 'fastify';
 
 import { config } from './config';
 import { registerRoutes } from './lib/routes';
 import { logger } from './lib/logger';
+import { loggerV2 } from './lib/logger-v2';
 import { logMiddleware } from './lib/middleware/log-middleware';
-import { corsMiddleware } from './lib/middleware/cors-middleware';
-import { MemLogger } from './lib/modules/mem-logger';
+import { registerCorsMiddleware } from './lib/middleware/cors-middleware';
+import { MemLogger, MemLoggerStream } from './lib/modules/mem-logger';
 import { MEM_CACHE } from './lib/services/image-service-v0';
 
 export async function initServer() {
   return new Promise<void>((resolve, reject) => {
-    let app: Express, port: number;
+    let app: FastifyInstance, port: number;
     let memLogger: MemLogger;
     if(config.APP_ENV === 'dev') {
       memLogger = new MemLogger(MEM_CACHE);
@@ -21,14 +21,22 @@ export async function initServer() {
 
     port = config.PORT;
 
-    app = express();
+    app = Fastify({
+      loggerInstance: loggerV2
+    });
 
-    app.use(logMiddleware);
-    app.use(corsMiddleware);
+    // app.use(logMiddleware);
+    // app.use(corsMiddleware);
+    app = registerCorsMiddleware(app, config);
 
     app = registerRoutes(app);
-
-    app.listen(port, () => {
+    app.listen({
+      port
+    }, (err) => {
+      if(err) {
+        app.log.error(err);
+        process.exit(1);
+      }
       logger.info(`Listening on port: ${port}`);
       resolve();
     });

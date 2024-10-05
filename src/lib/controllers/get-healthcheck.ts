@@ -1,8 +1,7 @@
+import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { Request, Response } from 'express';
-
-export function getHealthcheck(req: Request, res: Response) {
-  res.status(200).json({
+export function getHealthcheck(req: FastifyRequest, res: FastifyReply) {
+  res.send({
     status: 'ok',
   });
 }
