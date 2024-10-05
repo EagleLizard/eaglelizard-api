@@ -1,7 +1,7 @@
 
 import { Readable } from 'stream';
 
-import { Request, Response } from 'express';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   ApiError,
 } from '@google-cloud/common';
@@ -11,7 +11,19 @@ import { getImageTransformStreamV2 } from '../services/image-service-v2';
 import { logger } from '../logger';
 import { isNumber } from '../modules/type-validation/validate-primitives';
 
-export async function getImagesV2(req: Request, res: Response) {
+export async function getImagesV2(
+  req: FastifyRequest<{
+    Params: {
+      image?: string;
+      folder?: string;
+    },
+    Querystring: {
+      width?: string;
+      height?: string;
+    }
+  }>,
+  res: FastifyReply
+) {
   let imageKey: string, folderKey: string, widthParam: string, width: number,
     heightParam: string, height: number;
   let gcpImageStream: ImageStream,
@@ -46,15 +58,13 @@ export async function getImagesV2(req: Request, res: Response) {
     if(e instanceof ApiError) {
       logger.error(`${e.code} - ${e.message}`);
       res.statusCode = e.response.statusCode;
-      res.statusMessage = e.response.statusMessage;
-      return res.end();
+      return res.send(e.response.statusMessage);
     } else if(e.code !== undefined) {
       res.statusCode = (isNumber(e.code))
         ? e.code
         : 500
       ;
-      res.statusMessage = e.message;
-      return res.end();
+      return res.send(e.message);
     } else {
       throw e;
     }
@@ -64,15 +74,15 @@ export async function getImagesV2(req: Request, res: Response) {
 
   const CACHE_CONTROL_MAX_AGE = 60 * 60 * 24;
 
-  res.setHeader('content-type', headers['content-type']);
-  res.setHeader('cache-control', `max-age=${CACHE_CONTROL_MAX_AGE}`);
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.header('content-type', headers['content-type']);
+  res.header('cache-control', `max-age=${CACHE_CONTROL_MAX_AGE}`);
+  res.header('Access-Control-Allow-Origin', '*');
 
   imageStream.on('error', err => {
     console.error(err);
   });
 
-  imageStream.pipe(res);
+  return res.send(imageStream);
   // await sleepStream(imageStream, 500);
 }
 

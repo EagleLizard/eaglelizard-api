@@ -1,49 +1,63 @@
 
-import { Request, Response } from 'express';
 import { JcdProject, JcdProjectPage } from '../../../models/jcd-entities';
 
 import { JcdService } from '../../services/jcd/jcd-service';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
-export async function getJcdProjectList(req: Request, res: Response) {
+export async function getJcdProjectList(req: FastifyRequest, res: FastifyReply) {
   let jcdProjectKeys: string[];
   jcdProjectKeys = await JcdService.getJcdProjectKeys();
-  res.status(200).json({
+  res.send({
     projects: jcdProjectKeys,
   });
 }
 
-export async function getJcdProjects(req: Request, res: Response) {
+export async function getJcdProjects(req: FastifyRequest, res: FastifyReply) {
   let jcdProjects: JcdProject[];
   jcdProjects = await JcdService.getJcdProjects();
-  res.status(200).json({
+  res.send({
     projects: jcdProjects,
   });
 }
 
-export async function getJcdProject(req: Request, res: Response) {
+export async function getJcdProject(
+  req: FastifyRequest<{
+    Params: {
+      projectRoute?: string;
+    };
+  }>,
+  res: FastifyReply,
+) {
   let jcdProject: JcdProject, projectRoute: string;
   projectRoute = req.params.projectRoute;
   try {
     jcdProject = await JcdService.getJcdProject(projectRoute);
-    res.status(200).json({
+    return res.send({
       project: jcdProject,
     });
   } catch(e) {
     console.error(e);
-    res.status(500).end();
+    res.status(500).send();
   }
 }
 
-export async function getJcdProjectPage(req: Request, res: Response) {
+export async function getJcdProjectPage(
+  req: FastifyRequest<{
+    Params: {
+      projectKey?: string;
+    };
+  }>,
+  res: FastifyReply,
+) {
   let jcdProjectPage: JcdProjectPage, projectKey: string;
   projectKey = req.params.projectKey;
   try {
     jcdProjectPage = await JcdService.getJcdProjectPage(projectKey);
-    res.status(200).json({
+    res.send({
       projectPage: jcdProjectPage,
     });
   } catch(e) {
     console.error(e);
-    res.status(500).end();
+    res.status(500).send();
   }
 }

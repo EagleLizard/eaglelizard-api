@@ -1,6 +1,5 @@
+import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { Request, Response } from 'express';
-
-export function getBaseRoute(req: Request, res: Response) {
+export function getBaseRoute(req: FastifyRequest, res: FastifyReply) {
   res.send('EagleLizard API GCP');
 }

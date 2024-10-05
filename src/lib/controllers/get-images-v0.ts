@@ -1,11 +1,23 @@
 
-import { Request, Response } from 'express';
 import { Readable } from 'stream';
 
 import { getImageTransformStream } from '../services/image-service-v0';
 import { ImageStream } from '../../models/image-stream';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
-export async function getImagesV0(req: Request, res: Response) {
+export async function getImagesV0(
+  req: FastifyRequest<{
+    Params: {
+      image?: string;
+      folder?: string;
+    },
+    Querystring: {
+      width?: string;
+      height?: string;
+    }
+  }>,
+  res: FastifyReply
+) {
   let imageKey: string, folderKey: string, widthParam: string, width: number,
     heightParam: string, height: number;
   let s3ImageStream: ImageStream,
@@ -39,7 +51,7 @@ export async function getImagesV0(req: Request, res: Response) {
   headers = s3ImageStream.headers;
   imageStream = s3ImageStream.stream;
 
-  res.setHeader('content-type', headers['content-type']);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  imageStream.pipe(res);
+  res.header('content-type', headers['content-type']);
+  res.header('Access-Control-Allow-Origin', '*');
+  return res.send(imageStream);
 }
