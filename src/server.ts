@@ -37,7 +37,7 @@ export async function initServer() {
         app.log.error(err);
         process.exit(1);
       }
-      logger.info(`Listening on port: ${port}`);
+      loggerV2.info(`Listening on port: ${port}`);
       resolve();
     });
   });

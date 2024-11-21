@@ -19,6 +19,9 @@ const JCD_GCP_BUCKET = 'jcd-image-1';
 const JCD_V3_GCP_BUCKET = 'jcd-image-v3';
 
 const JCD_WEB_ORIGIN = getEnvVarOrErr('JCD_WEB_ORIGIN');
+const IMG_MEM_CACHE = getBoolEnvVar('IMG_MEM_CACHE');
+
+const SFS_PORT = getNumberEnvVar('SFS_PORT');
 
 (() => {
   try {
@@ -40,6 +43,9 @@ export type EzdConfig = {
   JCD_V3_GCP_BUCKET: string;
 
   JCD_WEB_ORIGIN: string;
+  IMG_MEM_CACHE: boolean;
+
+  SFS_PORT: number;
 }
 
 export const config = {
@@ -53,6 +59,8 @@ export const config = {
   JCD_V3_GCP_BUCKET,
 
   JCD_WEB_ORIGIN,
+  IMG_MEM_CACHE,
+  SFS_PORT,
 } as const satisfies EzdConfig;
 
 function init() {
@@ -79,4 +87,23 @@ function getEnvVarOrErr(envKey: string): string {
     throw new Error(`Invalid ${envKey}`);
   }
   return rawEnvVar;
+}
+
+function getBoolEnvVar(envKey: string): boolean {
+  let envVal = process.env[envKey];
+  if(envVal?.toLowerCase() === 'true') {
+    return true;
+  }
+  return false;
+}
+
+function getNumberEnvVar(envKey: string): number {
+  let rawPort: string;
+  let portNum: number;
+  rawPort = getEnvVarOrErr(envKey);
+  portNum = +rawPort;
+  if(isNaN(portNum)) {
+    throw new Error(`invalid env var ${envKey}, expected 'number'`);
+  }
+  return portNum;
 }
