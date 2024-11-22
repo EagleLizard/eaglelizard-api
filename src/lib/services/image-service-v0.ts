@@ -1,6 +1,7 @@
 
 import { PassThrough, Readable } from 'stream';
 
+import { ImageServiceDev } from './image-service-dev';
 import {
   getS3ImageStream,
 } from './aws-s3-service';
@@ -35,7 +36,15 @@ export async function getImageTransformStream(opts: GetImageTransformStreamOpts)
   ) {
     imageStream = await getResizeImageStream(opts);
   } else {
-    imageStream = await getImageStream(imageKey, folderKey);
+    if(config.APP_ENV === 'dev') {
+      imageStream = await ImageServiceDev.getImageStream({
+        imageKey,
+        folderKey,
+        versionFolder: 'img-v0',
+      });
+    } else {
+      imageStream = await getImageStream(imageKey, folderKey);
+    }
   }
   return {
     stream: imageStream.stream,

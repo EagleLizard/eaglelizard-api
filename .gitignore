@@ -7,3 +7,4 @@ dist
 logs
 gcp-private-key.json
 image_cache
+_local

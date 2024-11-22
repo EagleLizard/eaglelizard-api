@@ -9,6 +9,8 @@ import { imageTransform } from '../modules/image-transform';
 import {
   getGcpImageStream,
 } from './gcp-storage-service';
+import { config } from '../../config';
+import { ImageServiceDev } from './image-service-dev';
 
 export async function getImageTransformStreamV1(opts: GetImageTransformStreamOpts): Promise<ImageStream> {
   let gcpImageStream: ImageStream, transformStream: Readable, imageStream: ImageStream;
@@ -18,10 +20,18 @@ export async function getImageTransformStreamV1(opts: GetImageTransformStreamOpt
     width,
     height,
   } = opts;
-  gcpImageStream = await getGcpImageStream({
-    imageKey,
-    folderKey,
-  });
+  if(config.APP_ENV === 'dev') {
+    gcpImageStream = await ImageServiceDev.getImageStream({
+      imageKey,
+      folderKey,
+      versionFolder: 'img-v3',
+    });
+  } else {
+    gcpImageStream = await getGcpImageStream({
+      imageKey,
+      folderKey,
+    });
+  }
 
   transformStream = await imageTransform({
     imageStream: gcpImageStream.stream,

@@ -4,6 +4,8 @@ import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config();
 
+import { isString } from './lib/modules/type-validation/validate-primitives';
+
 const DEFAULT_PORT = 8080;
 
 let PORT: number;
@@ -16,6 +18,11 @@ const APP_ENV = process.env.APP_ENV;
 const JCD_GCP_BUCKET = 'jcd-image-1';
 const JCD_V3_GCP_BUCKET = 'jcd-image-v3';
 
+const JCD_WEB_ORIGIN = getEnvVarOrErr('JCD_WEB_ORIGIN');
+const IMG_MEM_CACHE = getBoolEnvVar('IMG_MEM_CACHE');
+
+const SFS_PORT = getNumberEnvVar('SFS_PORT');
+
 (() => {
   try {
     init();
@@ -24,6 +31,22 @@ const JCD_V3_GCP_BUCKET = 'jcd-image-v3';
     throw e;
   }
 })();
+
+export type EzdConfig = {
+  PORT: number;
+  APP_ROOT: string;
+  RUNTIME_ENV: string;
+  GCP_PROJECT_ID: string;
+  aws_access_key_id: string;
+  APP_ENV: string;
+  JCD_GCP_BUCKET: string;
+  JCD_V3_GCP_BUCKET: string;
+
+  JCD_WEB_ORIGIN: string;
+  IMG_MEM_CACHE: boolean;
+
+  SFS_PORT: number;
+}
 
 export const config = {
   PORT,
@@ -34,7 +57,11 @@ export const config = {
   APP_ENV,
   JCD_GCP_BUCKET,
   JCD_V3_GCP_BUCKET,
-} as const;
+
+  JCD_WEB_ORIGIN,
+  IMG_MEM_CACHE,
+  SFS_PORT,
+} as const satisfies EzdConfig;
 
 function init() {
   let isEnvPortStrValid: boolean, isEnvPortValid: boolean;
@@ -51,4 +78,32 @@ function init() {
 
 export function isDevEnv(): boolean {
   return config.APP_ENV === 'dev';
+}
+
+function getEnvVarOrErr(envKey: string): string {
+  let rawEnvVar: string | undefined;
+  rawEnvVar = process.env[envKey];
+  if(!isString(rawEnvVar)) {
+    throw new Error(`Invalid ${envKey}`);
+  }
+  return rawEnvVar;
+}
+
+function getBoolEnvVar(envKey: string): boolean {
+  let envVal = process.env[envKey];
+  if(envVal?.toLowerCase() === 'true') {
+    return true;
+  }
+  return false;
+}
+
+function getNumberEnvVar(envKey: string): number {
+  let rawPort: string;
+  let portNum: number;
+  rawPort = getEnvVarOrErr(envKey);
+  portNum = +rawPort;
+  if(isNaN(portNum)) {
+    throw new Error(`invalid env var ${envKey}, expected 'number'`);
+  }
+  return portNum;
 }
