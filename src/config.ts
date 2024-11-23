@@ -17,11 +17,14 @@ const APP_ENV = process.env.APP_ENV;
 
 const JCD_GCP_BUCKET = 'jcd-image-1';
 const JCD_V3_GCP_BUCKET = 'jcd-image-v3';
+const JCD_V4_GCP_BUCKET = 'jcd-image-v4';
 
 const JCD_WEB_ORIGIN = getEnvVarOrErr('JCD_WEB_ORIGIN');
 const IMG_MEM_CACHE = getBoolEnvVar('IMG_MEM_CACHE');
 
 const SFS_PORT = getNumberEnvVar('SFS_PORT');
+
+const JCD_IMG_V3_TO_V4 = getBoolEnvVar('JCD_IMG_V3_TO_V4');
 
 (() => {
   try {
@@ -41,11 +44,14 @@ export type EzdConfig = {
   APP_ENV: string;
   JCD_GCP_BUCKET: string;
   JCD_V3_GCP_BUCKET: string;
+  JCD_V4_GCP_BUCKET: string;
 
   JCD_WEB_ORIGIN: string;
   IMG_MEM_CACHE: boolean;
 
   SFS_PORT: number;
+
+  JCD_IMG_V3_TO_V4: boolean;
 }
 
 export const config = {
@@ -57,10 +63,13 @@ export const config = {
   APP_ENV,
   JCD_GCP_BUCKET,
   JCD_V3_GCP_BUCKET,
+  JCD_V4_GCP_BUCKET,
 
   JCD_WEB_ORIGIN,
   IMG_MEM_CACHE,
   SFS_PORT,
+
+  JCD_IMG_V3_TO_V4
 } as const satisfies EzdConfig;
 
 function init() {

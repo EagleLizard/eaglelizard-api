@@ -10,7 +10,7 @@ import { isNull } from '../modules/type-validation/validate-primitives';
 import { config } from '../../config';
 
 export type ImageStreamDevOpts = GetGcpImageStreamOpts & {
-  versionFolder: 'img-v0' | 'img-v3';
+  versionFolder: 'img-v0' | 'img-v3' | 'img-v4';
 };
 
 export class ImageServiceDev {

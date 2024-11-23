@@ -7,7 +7,10 @@ import {
   getS3Secret,
   AwsS3Secret,
 } from './gcp-auth-service';
-import { awsSdkLogStream, awsSdkLogger } from '../logger';
+import {
+  // awsSdkLogStream,
+  awsSdkLogger,
+} from '../logger';
 import { ImageStream } from '../../models/image-stream';
 
 // AWS.config.logger = awsSdkLogStream;
@@ -57,7 +60,7 @@ export async function getS3ImageStream(opts: GetS3ImageStreamOpts): Promise<Imag
 
 async function getAwsS3(): Promise<S3Client> {
   delete process.env.AWS_SECRET_ACCESS_KEY;
-  let awsS3Secret: AwsS3Secret
+  let awsS3Secret: AwsS3Secret;
   let s3: S3Client;
   awsS3Secret = await getS3Secret();
   s3 = new S3Client({

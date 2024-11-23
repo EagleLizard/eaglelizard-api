@@ -1,4 +1,5 @@
 
+import path from 'path/posix';
 import { Readable } from 'stream';
 
 import { Request, Response } from 'express';
@@ -8,8 +9,10 @@ import {
 
 import { ImageStream } from '../../models/image-stream';
 import { getImageTransformStreamV2 } from '../services/image-service-v2';
+import { ImageServiceV3  } from '../services/image-service-v3';
 import { logger } from '../logger';
 import { isNumber } from '../modules/type-validation/validate-primitives';
+import { config } from '../../config';
 
 export async function getImagesV2(req: Request, res: Response) {
   let imageKey: string, folderKey: string, widthParam: string, width: number,
@@ -36,12 +39,29 @@ export async function getImagesV2(req: Request, res: Response) {
     height = +heightParam;
   }
   try {
-    gcpImageStream = await getImageTransformStreamV2({
-      imageKey,
-      folderKey,
-      width,
-      height,
-    });
+    if(config.JCD_IMG_V3_TO_V4) {
+      let imagePath: string;
+      if(folderKey !== undefined) {
+        imagePath = [
+          folderKey,
+          imageKey,
+        ].join(path.sep);
+      } else {
+        imagePath = imageKey;
+      }
+      gcpImageStream = await ImageServiceV3.getImage({
+        imagePath,
+        width,
+        height,
+      });
+    } else {
+      gcpImageStream = await getImageTransformStreamV2({
+        imageKey,
+        folderKey,
+        width,
+        height,
+      });
+    }
   } catch(e) {
     if(e instanceof ApiError) {
       logger.error(`${e.code} - ${e.message}`);

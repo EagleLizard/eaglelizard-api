@@ -1,5 +1,5 @@
 
-import { PassThrough, Readable } from 'stream';
+import { Readable } from 'stream';
 
 import { ImageCacheV2 } from './image-service-v2/image-cache-v2';
 import {

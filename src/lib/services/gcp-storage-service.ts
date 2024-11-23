@@ -10,7 +10,6 @@ import {
 } from '@google-cloud/common';
 import { PassThrough, Readable } from 'stream';
 
-import { config } from '../../config';
 import { ImageStream } from '../../models/image-stream';
 import { JCD_BUCKET_MAP, JCD_VERSION_ENUM } from '../jcd-constants';
 
@@ -22,7 +21,7 @@ let gcpStorage: Storage;
 
 export interface GetGcpImageStreamOpts {
   imageKey: string;
-  folderKey: string;
+  folderKey?: string;
   cacheStream?: PassThrough;
   jcdBucketVersion?: JCD_VERSION_ENUM,
 }
