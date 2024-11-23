@@ -41,10 +41,12 @@ const formatConfig = format.combine(
 );
 
 const transportsConfig: transport[] = [
-  getFileTransport(),
   getConsoleTransport(),
   getGCPTransport(),
 ];
+if(isDevEnv()) {
+  transportsConfig.push(getFileTransport());
+}
 
 export const logger = createLogger({
   level: 'info',
