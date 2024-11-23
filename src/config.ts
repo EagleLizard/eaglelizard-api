@@ -106,7 +106,7 @@ function getBoolEnvVar(envKey: string): boolean {
 function getNumberEnvVar(envKey: string): number | undefined {
   let rawPort: string;
   let portNum: number;
-  rawPort = getEnvVarOrErr(envKey);
+  rawPort = process.env[envKey];
   portNum = +rawPort;
   if(isNaN(portNum)) {
     return undefined;
