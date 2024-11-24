@@ -1,6 +1,6 @@
 # [START app_yaml]
 runtime: nodejs20
-instance_class: F4
+# instance_class: F4
 automatic_scaling:
   max_concurrent_requests: 50
   target_throughput_utilization: 0.85
@@ -13,4 +13,5 @@ automatic_scaling:
 env_variables:
   GCP_PROJECT_ID: "286428615502"
   aws_access_key_id: "AKIAUKSW7EP4G66JAYXE"
+  JCD_IMG_V3_TO_V4: true
 # [EMD app_yaml]

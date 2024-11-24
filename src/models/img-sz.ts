@@ -7,6 +7,7 @@ const ImgSzs = [
   'md',
   'lg',
   'xl',
+  'xxl',
 ] as const;
 export type ImgSz = typeof ImgSzs[number];
 export const DEFAULT_IMG_SZ: ImgSz = 'lg';
@@ -29,16 +30,19 @@ export function imgSzFromDimensions(opts: {
     return DEFAULT_IMG_SZ;
   }
   let dimension = Math.max(opts.width ?? 0, opts.height ?? 0);
-  if(dimension > 1920) {
+  if(dimension > 2100) {
+    return 'xxl';
+  }
+  if(dimension > 1600) {
     return 'xl';
   }
-  if(dimension > 1366) {
+  if(dimension > 1200) {
     return 'lg';
   }
-  if(dimension > 854) {
+  if(dimension > 800) {
     return 'md';
   }
-  if(dimension > 666) {
+  if(dimension > 500) {
     return 'sm';
   }
   return 'xs';
