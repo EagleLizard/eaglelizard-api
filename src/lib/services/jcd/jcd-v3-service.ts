@@ -28,24 +28,31 @@ export class JcdV3Service {
       JcdV3Service.getJcdTitleImages(),
     ]);
 
-    jcdProjectPreviews = jcdProjectOrders.map(jcdProjectOrder => {
+    jcdProjectPreviews = [];
+
+    for(let i = 0; i < jcdProjectOrders.length; ++i) {
+      let foundProject: JcdV3Project;
+      let foundTitleImage: JcdV3Image;
       let projectPreview: JcdV3ProjectPreview;
-      let foundProject: JcdV3Project, foundTitleImage: JcdV3Image;
+      let jcdProjectOrder = jcdProjectOrders[i];
       foundProject = jcdProjects.find(jcdProject => {
         return jcdProject.projectKey === jcdProjectOrder.projectKey;
       });
       foundTitleImage = jcdTitleImages.find(jcdTitleImage => {
         return jcdTitleImage.projectKey === jcdProjectOrder.projectKey;
       });
-      projectPreview = {
-        projectKey: jcdProjectOrder.projectKey,
-        route: foundProject.route,
-        title: foundProject.title,
-        titleUri: foundTitleImage.bucketFile,
-        orderIndex: jcdProjectOrder.orderIdx,
-      };
-      return projectPreview;
-    });
+      if((foundProject !== undefined) && (foundTitleImage !== undefined)) {
+        console.log(jcdProjectOrder);
+        projectPreview = {
+          projectKey: jcdProjectOrder.projectKey,
+          route: foundProject.route,
+          title: foundProject.title,
+          titleUri: foundTitleImage.bucketFile,
+          orderIndex: jcdProjectOrder.orderIdx,
+        };
+        jcdProjectPreviews.push(projectPreview);
+      }
+    }
     return jcdProjectPreviews;
   }
 
