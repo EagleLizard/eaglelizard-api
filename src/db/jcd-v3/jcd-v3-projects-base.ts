@@ -4,6 +4,40 @@ import { JCD_V3_PROJECT_ENUM } from './jcd-v3-project-enum';
 
 export const JCD_V3_PROJECT_BASES: JcdV3Project[] = [
   {
+    projectKey: JCD_V3_PROJECT_ENUM.METAMORPHOSES,
+    route: 'metamorphoses',
+    title: 'Metamorphoses',
+    playwright: [
+      'Written by Mary Zimmerman',
+    ],
+    venue: 'Bastian Theatre',
+    producer: 'The Noorda Center for the Performing Arts',
+    month: 11,
+    year: 2024,
+    description: [
+      'The director’s exploration of the script\'s themes led to his vision of the prevalence of the “deadly sins” in our society, specifically, the social environment of America today. The scenic design merges the classical world with contemporary values. The assemblage displayed in the frieze is an iconography of the contemporary American experience. The objects represent symbols of national identity, nostalgia, and patriotism, with a focus on political ideologies of cultural significance. The display features motifs of immigrant contributions alongside classic Americana imagery, emphasising the diversity and dynamism of the American identity.',
+    ],
+    productionCredits: [
+      'Directed by Steven Rimke',
+      'Technical Direction by Nate Lowry & Cristian Bell',
+      'Scenic Design by Janice Chan',
+      'Lighting Design by Carly Short & Danielle Tanner',
+      'Costume Design by Kaely Hope',
+      'Hair & Makeup Design by Shannon Hutchins',
+      'Production Photography by Suzy Oliveira',
+    ],
+    mediaAndPress: [
+      {
+        publication: '(UVU Review)',
+        description: '“Through the masterful performances and storytelling of the actors, the beautiful lighting, the wonderful sound and the magnificent sets, a final, lasting message is communicated to the audience.”',
+        link: {
+          label: 'UVU Theatre presents Metamorphoses',
+          uri: 'https://www.uvureview.com/valley-life/artsculture/uvu-theatre-presents-metamorphoses/',
+        },
+      },
+    ],
+  },
+  {
     projectKey: JCD_V3_PROJECT_ENUM.INTO_THE_WOODS,
     route: 'into-the-woods',
     title: 'Into The Woods',
