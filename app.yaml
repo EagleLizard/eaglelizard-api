@@ -2,9 +2,9 @@
 runtime: nodejs20
 # instance_class: F4
 automatic_scaling:
-  max_concurrent_requests: 50
-  target_throughput_utilization: 0.85
-  target_cpu_utilization: 0.75
+  # max_concurrent_requests: 10
+  # target_throughput_utilization: 0.6
+  # target_cpu_utilization: 0.75
   max_instances: 4
   min_idle_instances: automatic
   max_idle_instances: 3
