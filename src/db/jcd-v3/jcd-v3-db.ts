@@ -29,28 +29,45 @@ async function jcdV3DbMain() {
 
   const gcpDb = new Datastore;
   const gcpStorage = new Storage;
+  let dry = false;
+  dry = true;
 
   console.log('Jcd V3 DB Create');
 
   console.log('');
   console.log('createJcdV3Keys...');
-  await createJcdV3Keys(gcpDb);
+  await createJcdV3Keys({
+    gcpDb,
+    dry,
+  });
 
   console.log('');
   console.log('createJcdV3ProjectOrders...');
-  await createJcdV3ProjectOrders(gcpDb);
+  await createJcdV3ProjectOrders({
+    gcpDb,
+    dry,
+  });
 
   console.log('');
   console.log('createJcdV3Images...');
-  await createJcdV3ProjectImages(gcpDb);
+  await createJcdV3ProjectImages({
+    gcpDb,
+    dry,
+  });
 
   console.log('');
   console.log('createJcdV3Projects...');
-  await createJcdV3Projects(gcpDb);
+  await createJcdV3Projects({
+    gcpDb,
+    dry,
+  });
 
   console.log('');
   console.log('createJcdV3Images art/ ...');
-  await creatJcdV3Art(gcpDb);
+  await creatJcdV3Art({
+    gcpDb,
+    dry,
+  });
 
   // const bucketv3 = gcpStorage.bucket(config.JCD_V3_GCP_BUCKET);
   // const [ filesV3 ] = await bucketv3.getFiles();

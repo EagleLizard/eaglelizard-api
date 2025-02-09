@@ -4,8 +4,10 @@ import { JCD_V3_DB_PROJECT_KEY_KIND } from '../../../lib/jcd-v3-constants';
 
 import { JcdV3ProjectKey } from '../../../models/jcd-models-v3/jcd-v3-project-key';
 import { JCD_V3_PROJECT_LIST } from '../jcd-v3-project-list';
+import { JcdV3CreateDbOpts } from './jcd-v3-create';
 
-export async function createJcdV3Keys(gcpDb: Datastore) {
+export async function createJcdV3Keys(opts: JcdV3CreateDbOpts) {
+  let gcpDb: Datastore = opts.gcpDb;
   let transaction: Transaction;
   let projecKeysQuery: Query, projectKeyDbEntities: unknown[];
   let currJcdV3ProjectKeys: JcdV3ProjectKey[], nextJcdV3ProjectKeys: JcdV3ProjectKey[];
@@ -14,7 +16,6 @@ export async function createJcdV3Keys(gcpDb: Datastore) {
   [ projectKeyDbEntities ] = await projecKeysQuery.run();
 
   currJcdV3ProjectKeys = projectKeyDbEntities.map(JcdV3ProjectKey.deserialize);
-  // console.log(currJcdV3ProjectKeys);
   nextJcdV3ProjectKeys = JCD_V3_PROJECT_LIST.map(jcdV3ProjectEnumKey => {
     return new JcdV3ProjectKey(
       jcdV3ProjectEnumKey,
@@ -44,6 +45,11 @@ export async function createJcdV3Keys(gcpDb: Datastore) {
     jcdProjectKeyTuples.forEach(jcdProjectKeyTuple => {
       console.log(jcdProjectKeyTuple);
     });
+  }
+
+  if(opts.dry) {
+    console.log('dry');
+    return;
   }
 
   transaction = gcpDb.transaction();

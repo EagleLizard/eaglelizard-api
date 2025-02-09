@@ -3,8 +3,10 @@ import { Datastore, Key, Query, Transaction } from '@google-cloud/datastore';
 import { JcdV3Project } from '../../../models/jcd-models-v3/jcd-v3-project';
 import { JCD_V3_PROJECT_BASES } from '../jcd-v3-projects-base';
 import { JCD_V3_DB_PROJECT_KEY_KIND, JCD_V3_DB_PROJECT_KIND } from '../../../lib/jcd-v3-constants';
+import { JcdV3CreateDbOpts } from './jcd-v3-create';
 
-export async function createJcdV3Projects(gcpDb: Datastore) {
+export async function createJcdV3Projects(opts: JcdV3CreateDbOpts) {
+  let gcpDb: Datastore = opts.gcpDb;
   let transaction: Transaction;
   let projectsQuery: Query, jcdV3ProjectEntities: unknown[];
   let currJcdV3Projects: JcdV3Project[], nextJcdV3Projects: JcdV3Project[];
@@ -47,6 +49,11 @@ export async function createJcdV3Projects(gcpDb: Datastore) {
     nextJcdV3ProjectIds.forEach(nextJcdV3ProjectId => {
       console.log([ nextJcdV3ProjectId ]);
     });
+  }
+
+  if(opts.dry) {
+    console.log('dry');
+    return;
   }
 
   transaction = gcpDb.transaction();

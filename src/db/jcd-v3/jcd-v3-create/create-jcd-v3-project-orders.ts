@@ -4,8 +4,10 @@ import { Datastore, Key, Query, Transaction } from '@google-cloud/datastore';
 import { JcdV3ProjectOrder } from '../../../models/jcd-models-v3/jcd-v3-project-order';
 import { JCD_V3_PROJECT_ORDER_BASES } from '../jcd-v3-project-list';
 import { JCD_V3_DB_PROJECT_ORDER_KIND } from '../../../lib/jcd-v3-constants';
+import { JcdV3CreateDbOpts } from './jcd-v3-create';
 
-export async function createJcdV3ProjectOrders(gcpDb: Datastore) {
+export async function createJcdV3ProjectOrders(opts: JcdV3CreateDbOpts) {
+  let gcpDb: Datastore = opts.gcpDb;
   let transaction: Transaction;
   let projectOrderQuery: Query, projectOrderDbEntities: any[];
   let currJcdV3ProjectOrders: JcdV3ProjectOrder[], nextJcdV3ProjectOrders: JcdV3ProjectOrder[];
@@ -65,6 +67,10 @@ export async function createJcdV3ProjectOrders(gcpDb: Datastore) {
     jcdProjectOrderTuples.forEach(jcdProjectOrderTuple => {
       console.log(jcdProjectOrderTuple);
     });
+  }
+  if(opts.dry) {
+    console.log('dry');
+    return;
   }
 
   transaction = gcpDb.transaction();

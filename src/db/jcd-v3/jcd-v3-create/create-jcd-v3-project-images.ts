@@ -6,8 +6,10 @@ import { JcdV3Image } from '../../../models/jcd-models-v3/jcd-v3-image';
 import { JcdV3ImageProjectBase, JCD_V3_IMAGE_PROJECT_BASES } from '../jcd-v3-images-base';
 import { JCD_V3_PROJECT_ENUM } from '../jcd-v3-project-enum';
 import { JCD_V3_PROJECT_LIST } from '../jcd-v3-project-list';
+import { JcdV3CreateDbOpts } from './jcd-v3-create';
 
-export async function createJcdV3ProjectImages(gcpDb: Datastore) {
+export async function createJcdV3ProjectImages(opts: JcdV3CreateDbOpts) {
+  let gcpDb: Datastore = opts.gcpDb;
   let jcdV3ImageProjectBases: JcdV3ImageProjectBase[];
   jcdV3ImageProjectBases = [];
 
@@ -30,11 +32,21 @@ export async function createJcdV3ProjectImages(gcpDb: Datastore) {
   for(let i = 0; i < jcdV3ImageProjectBases.length; ++i) {
     let currV3ImageProjectBase: JcdV3ImageProjectBase;
     currV3ImageProjectBase = jcdV3ImageProjectBases[i];
-    await createJcdV3ProjectImage(gcpDb, currV3ImageProjectBase);
+    await createJcdV3ProjectImage({
+      gcpDb,
+      jcdV3ImageProjectBase: currV3ImageProjectBase,
+      dry: opts.dry,
+    });
   }
 }
 
-async function createJcdV3ProjectImage(gcpDb: Datastore, jcdV3ImageProjectBase: JcdV3ImageProjectBase) {
+type CreateJcdV3ProjectImageOpts = {
+  jcdV3ImageProjectBase: JcdV3ImageProjectBase;
+} & JcdV3CreateDbOpts;
+
+async function createJcdV3ProjectImage(opts: CreateJcdV3ProjectImageOpts) {
+  let gcpDb: Datastore = opts.gcpDb;
+  let jcdV3ImageProjectBase: JcdV3ImageProjectBase = opts.jcdV3ImageProjectBase;
   let transaction: Transaction;
   let imageQuery: Query, imageDbEntities: any[];
   let currJcdV3Images: JcdV3Image[];
@@ -118,6 +130,10 @@ async function createJcdV3ProjectImage(gcpDb: Datastore, jcdV3ImageProjectBase: 
     });
   }
 
+  if(opts.dry) {
+    console.log('dry');
+    return;
+  }
   transaction = gcpDb.transaction();
 
   nextJcdV3Images.forEach(jcdV3Image => {

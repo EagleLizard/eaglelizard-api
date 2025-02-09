@@ -4,8 +4,10 @@ import { JCD_V3_ART_PROJECT_KEY } from '../jcd-v3-project-enum';
 import { JCD_V3_ART_IMAGES_BASE } from '../jcd-v3-art-images-base';
 import { JcdV3Image } from '../../../models/jcd-models-v3/jcd-v3-image';
 import { JCD_V3_DB_IMAGE_KIND } from '../../../lib/jcd-v3-constants';
+import { JcdV3CreateDbOpts } from './jcd-v3-create';
 
-export async function creatJcdV3Art(gcpDb: Datastore) {
+export async function creatJcdV3Art(opts: JcdV3CreateDbOpts) {
+  let gcpDb: Datastore = opts.gcpDb;
   let transaction: Transaction;
   let imageQuery: Query, imageDbEntities: unknown[];
   let jcdV3ArtProjectKeyId: string, currJcdV3Images: JcdV3Image[];
@@ -76,6 +78,11 @@ export async function creatJcdV3Art(gcpDb: Datastore) {
     nextJcdV3ImageTuples.forEach(jcdImageTuple => {
       console.log(jcdImageTuple);
     });
+  }
+
+  if(opts.dry) {
+    console.log('dry');
+    return;
   }
 
   transaction = gcpDb.transaction();
