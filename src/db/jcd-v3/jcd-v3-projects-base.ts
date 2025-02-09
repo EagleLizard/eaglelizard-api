@@ -4,6 +4,42 @@ import { JCD_V3_PROJECT_ENUM } from './jcd-v3-project-enum';
 
 export const JCD_V3_PROJECT_BASES: JcdV3Project[] = [
   {
+    projectKey: JCD_V3_PROJECT_ENUM.INTO_THE_WOODS,
+    route: 'into-the-woods',
+    title: 'Into The Woods',
+    playwright: [
+      'Music & Lyrics By Stephen Sondheim',
+      'Book By James Lapine',
+    ],
+    venue: 'Smith Theatre',
+    producer: 'The Noorda Center for the Performing Arts',
+    month: 4,
+    year: 2024,
+    description: [
+      'The design concept was a library in the woods, where characters from abandoned tales led the charge in telling their stories and finding their way through their journey in the woods. As their paths cross, they navigate through their imperfect storylines.',
+    ],
+    productionCredits: [
+      'Directed by Jennifer Delac Rimke & Amanda Crabb',
+      'Technical Direction by Eric Kiekhaefer, Cristian Bell, & Nate Lowry',
+      'Scenic Design by Janice Chan',
+      'Assistant Scenic Design by Lucinda Lai',
+      'Props Design by Cortnee Quist',
+      'Lighting Design by Ryan Fallis',
+      'Costume Design by Lillian Hanks',
+      'Hair & Makeup Design by Sariah Spencer',
+      'Production Photography by Suzy Oliveira',
+    ],
+    mediaAndPress: [
+      {
+        publication: '(UVU Review)',
+        link: {
+          label: '“Into the Woods”: UVU Theatre’s brilliant 2023-2024 season ending',
+          uri: 'https://www.uvureview.com/valley-life/into-the-woods-uvu-theatres-brilliant-2023-2024-season-ending/',
+        }
+      }
+    ]
+  },
+  {
     projectKey: JCD_V3_PROJECT_ENUM.WERTHER,
     route: 'werther',
     title: 'Werther',
