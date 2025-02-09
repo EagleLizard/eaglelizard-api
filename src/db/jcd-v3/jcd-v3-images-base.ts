@@ -14,6 +14,75 @@ export type JcdV3ImageProjectBase = {
 
 export const JCD_V3_IMAGE_PROJECT_BASES: JcdV3ImageProjectBase[] = [
   {
+    projectKey: JCD_V3_PROJECT_ENUM.BITTER_LEMON,
+    titleImgUri: 'bitter-lemon/00-bitter-lemon.jpg',
+    galleryImgUris: [
+      'bitter-lemon/01-bitter-lemon.jpg',
+      'bitter-lemon/02-bitter-lemon.jpg',
+      'bitter-lemon/03-bitter-lemon.jpg',
+      'bitter-lemon/04-bitter-lemon.jpg',
+      'bitter-lemon/05-bitter-lemon.jpg',
+      'bitter-lemon/06-bitter-lemon.jpg',
+      'bitter-lemon/07-bitter-lemon.jpg',
+      'bitter-lemon/08-bitter-lemon.jpg',
+      'bitter-lemon/09-bitter-lemon.jpg',
+    ]
+  },
+  {
+    projectKey: JCD_V3_PROJECT_ENUM.METAMORPHOSES,
+    titleImgUri: 'metamorphoses/00-metamorphoses.jpg',
+    galleryImgUris: [
+      'metamorphoses/01-metamorphoses.jpg',
+      'metamorphoses/02-metamorphoses.jpg',
+      'metamorphoses/03-metamorphoses.jpg',
+      'metamorphoses/04-metamorphoses.jpg',
+      'metamorphoses/05-metamorphoses.jpg',
+      'metamorphoses/06-metamorphoses.jpg',
+      'metamorphoses/07-metamorphoses.jpg',
+      'metamorphoses/08-metamorphoses.jpg',
+      'metamorphoses/09-metamorphoses.jpg',
+      'metamorphoses/10-metamorphoses.jpg',
+      'metamorphoses/11-metamorphoses.jpg',
+      'metamorphoses/12-metamorphoses.jpg',
+      'metamorphoses/13-metamorphoses.jpg',
+    ]
+  },
+  {
+    projectKey: JCD_V3_PROJECT_ENUM.INTO_THE_WOODS,
+    titleImgUri: 'into-the-woods/00-woods.jpg',
+    galleryImgUris: [
+      'into-the-woods/01-woods.jpg',
+      'into-the-woods/02-woods.jpg',
+      'into-the-woods/03-woods.jpg',
+      'into-the-woods/04-woods.jpg',
+      'into-the-woods/05-woods.jpg',
+      'into-the-woods/06-woods.jpg',
+      'into-the-woods/07-woods.jpg',
+      'into-the-woods/08-woods.jpg',
+      'into-the-woods/09-woods.jpg',
+      'into-the-woods/10-woods.jpg',
+      'into-the-woods/11-woods.jpg',
+      'into-the-woods/12-woods.jpg',
+      'into-the-woods/13-woods.jpg',
+    ],
+  },
+  {
+    projectKey: JCD_V3_PROJECT_ENUM.WERTHER,
+    titleImgUri: 'werther/00-werther.jpg',
+    galleryImgUris: [
+      'werther/01-werther.jpg',
+      'werther/02-werther.jpg',
+      'werther/03-werther.jpg',
+      'werther/04-werther.jpg',
+      'werther/05-werther.jpg',
+      'werther/06-werther.jpg',
+      'werther/07-werther.jpg',
+      'werther/08-werther.jpg',
+      'werther/09-werther.jpg',
+      'werther/10-werther.jpg',
+    ],
+  },
+  {
     projectKey: JCD_V3_PROJECT_ENUM.BALTHAZAR,
     titleImgUri: 'balthazar/00-Balthazar.jpg',
     galleryImgUris: [

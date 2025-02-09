@@ -4,6 +4,33 @@ import { JCD_V3_PROJECT_ENUM } from './jcd-v3-project-enum';
 
 export const JCD_V3_PROJECT_BASES: JcdV3Project[] = [
   {
+    projectKey: JCD_V3_PROJECT_ENUM.WERTHER,
+    route: 'werther',
+    title: 'Werther',
+    playwright: [
+      'Drame Lyrique By Jules Massenet',
+    ],
+    venue: 'Smith Theatre',
+    producer: 'The Noorda Center for the Performing Arts',
+    month: 11,
+    year: 2024,
+    description: [
+      'The scenic concept of Werther largely focused on the themes of love versus duty. Werther’s emotions were represented by his organic environment; motifs from the natural world symbolised his volatile and emotional love affair with Charlotte. Charlotte’s dedication to her duty in society created a barrier that kept her from pursuing Werther. She was often surrounded by symbolic motifs of order and physical walls, framing her within social expectations.',
+    ],
+    productionCredits: [
+      'Directed by Isaac Hurtado',
+      'Conducted by Cheung Chau',
+      'Technical Direction by Nate Lowry & Cristian Bell',
+      'Scenic & Props Design by Janice Chan',
+      'Lighting Design by Peter D. Leonard',
+      'Costume Design by Mallory Goodman',
+      'Hair & Makeup Design by Daniel Perez',
+      'Scenic Construction by Draper Art Fabrication & Lucky Dart Studio',
+      'Production Photography by Sami Lou Photography',
+    ],
+    mediaAndPress: [],
+  },
+  {
     projectKey: JCD_V3_PROJECT_ENUM.GO_HOME_COME_BACK,
     route: 'go-home-come-back',
     title: 'Go Home Come Back',
