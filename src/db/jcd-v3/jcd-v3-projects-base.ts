@@ -4,6 +4,94 @@ import { JCD_V3_PROJECT_ENUM } from './jcd-v3-project-enum';
 
 export const JCD_V3_PROJECT_BASES: JcdV3Project[] = [
   {
+    projectKey: JCD_V3_PROJECT_ENUM.BITTER_LEMON,
+    route: 'bitter-lemon',
+    title: 'Bitter Lemon',
+    playwright: [
+      'World Premiere by Melissa Leilani Larson',
+    ],
+    venue: 'Rose Wagner Performing Arts Center',
+    producer: 'Plan-B Theatre Company',
+    month: 4,
+    year: 2024,
+    description: [
+      'In a purgatorial waiting room, Finlay Macbeth and Lady Helen meet in a liminal space of reflection, against a backdrop inspired by the stone architecture of the Scottish Play.',
+    ],
+    productionCredits: [
+      'Directed by Jerry Rapier',
+      'Scenic Design by Janice Chan',
+      'Lighting Design by Emma Belnap',
+      'Sound Design by Cheryl Ann Cluff',
+      'Costume Design by Victoria Bird',
+      'Scenic Construction by David Knoell',
+      'Production Photography by Sharah Meservy',
+    ],
+    mediaAndPress: [
+      {
+        publication: '(Front Row Reviewers)',
+        description: '“When entering the theater, the audience’s eye is immediately drawn to the scenic design by Janice Chan. With mylar on the floor reflecting the lighting (design by Emma Belnap) onto crinkled panels that serve as backdrop, the space feels ethereal and almost unreal.”',
+        link: {
+          label: 'Plan-B Theatre presents Bitter Lemon: The Scottish Play and the Afterlife',
+          uri: 'https://frontrowreviewers.com/?p=22596',
+        },
+      },
+      {
+        publication: '(Gephardt Daily)',
+        description: '“It is a striking, memorable set up…”',
+        link: {
+          label: 'Review: Plan-B Theatre’s ‘Bitter Lemon’ is a battle of wills’',
+          uri: 'https://gephardtdaily.com/local/review-plan-b-theatres-bitter-lemon-is-a-battle-of-wills/',
+        },
+      },
+      {
+        publication: '(The Utah Review)',
+        description: '“The set design (courtesy of Janice Chan, scenic designer and David Knoell, scenic builder and electrician) is emblematic of Plan-B Theatre’s deft and resourceful minimalistic rendering that clearly evokes the desired purgatorial setting of the play.”',
+        link: {
+          label: 'A prized chamber theater jewel: Outstanding acting invigorates Plan-B Theatre’s production of Melissa Leilani Larson’s Bitter Lemon',
+          uri: 'https://www.theutahreview.com/a-prized-chamber-theater-jewel-outstanding-acting-invigorates-plan-b-theatres-production-of-melissa-leilani-larsons-bitter-lemon/',
+        },
+      },
+      {
+        publication: '(SLUG Mag)',
+        description: '“...the hyper-minimalist set created by scenic designer Janice Chan effectively complements the stripped-down script. The smattering of geometric stools is familiar to anyone who has ever performed a contemporary play in a black box theater, but the crinkly layered backdrops echo the idea of second chances, as if someone had crumpled up a large piece of paper, changed their mind and flattened it out again.”',
+        link: {
+          label: 'Play Review: Bitter Lemon',
+          uri: 'https://www.slugmag.com/arts/art/performance-theatre/play-review-bitter-lemon/',
+        },
+      },
+      {
+        publication: '(Rhetorical Review)',
+        description: '“Upon entering the theater, Janice Chan’s scenic design, expertly crafted by David Knoell, immediately captivates the audience’s gaze. The reflective mylar on the floor interacts with Emma Belnap’s lighting design, casting ethereal reflections onto crinkled backdrop panels and creating an otherworldly ambiance.”',
+        link: {
+          label: '“Bitter Lemon”: Welcome to Hell, Macbeth!',
+          uri: 'https://rhetoricalreview.com/2024/04/10/bitter-lemon-welcome-to-hell-macbeth/',
+        },
+      },
+      {
+        publication: '(QSalt Lake Magazine)',
+        description: '“...the Plan-B production has a fantastic group of designers on board.”',
+        link: {
+          label: '‘Bitter Lemon’ gives Lady Macduff her say',
+          uri: 'https://www.qsaltlake.com/news/2024/03/20/bitter-lemon-gives-lady-macduff-her-say/',
+        },
+      },
+      {
+        publication: '(15 Bytes)',
+        link: {
+          label: 'What if Lady Macduff Finally Had Her Say?',
+          uri: 'https://artistsofutah.org/15Bytes/index.php/what-if-lady-macduff-finally-had-her-say/',
+        },
+      },
+      {
+        publication: '(Salt Lake Magazine)',
+        link: {
+          label: 'Review: ‘Bitter Lemon’ at Plan-B',
+          uri: 'https://www.saltlakemagazine.com/bitter-lemon-at-plan-b/',
+        },
+      },
+    ],
+  },
+  {
     projectKey: JCD_V3_PROJECT_ENUM.METAMORPHOSES,
     route: 'metamorphoses',
     title: 'Metamorphoses',
